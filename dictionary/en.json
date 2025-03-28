@@ -1,5 +1,8 @@
 {
   "Header": {
     "tittle": "Hello in rest-client!"
+  },
+  "Welcome_Page": {
+    "tittle": "Welcome, plz login... bla-bla"
   }
 }

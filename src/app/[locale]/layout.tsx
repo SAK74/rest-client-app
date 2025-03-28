@@ -23,11 +23,11 @@ export default async function RootLayout({
     notFound();
   }
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body>
         <NextIntlClientProvider>
           <Header />
-          {children}
+          <main className="min-h-screen">{children}</main>
         </NextIntlClientProvider>
         <Footer />
       </body>
