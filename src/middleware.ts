@@ -1,17 +1,15 @@
-import createIntlMiddleware from "next-intl/middleware";
-import { routing } from "./i18n/routing";
+import { intlMiddleware, routing } from "./i18n/routing";
 import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import type { NextRequest } from "next/server";
 
-const intlMiddleware = createIntlMiddleware(routing);
-const { auth: authMiddleware } = NextAuth(authConfig) as unknown as {
-  auth: (req: NextRequest) => Response | Promise<Response>;
+const { auth } = NextAuth(authConfig) as unknown as {
+  auth: (req?: NextRequest) => Response | Promise<Response>;
 };
 
-const publicRoutes = ["/", "/login", "/register"];
+const isPublicPage = ["/", "/login", "/register"];
 const publicPathnameRegex = RegExp(
-  `^(/(${routing.locales.join("|")}))?(${publicRoutes
+  `^(/(${routing.locales.join("|")}))?(${isPublicPage
     .flatMap((p) => (p === "/" ? ["", "/"] : p))
     .join("|")})/?$`,
   "i",
@@ -19,13 +17,8 @@ const publicPathnameRegex = RegExp(
 
 export default function middleware(req: NextRequest) {
   const isPublicRoute = publicPathnameRegex.test(req.nextUrl.pathname);
-  console.log(
-    "Middleware, isPublicRoute: ",
-    req.nextUrl.pathname,
-    isPublicRoute,
-  );
 
-  return isPublicRoute ? intlMiddleware(req) : authMiddleware(req);
+  return isPublicRoute ? intlMiddleware(req) : auth(req);
 }
 
 export const config = {

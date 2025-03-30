@@ -5,6 +5,8 @@ import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import Header from "../_components/Header";
 import Footer from "../_components/Footer";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "Rest-client",
@@ -22,12 +24,15 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+  const session = await auth();
   return (
     <html lang={locale}>
       <body>
         <NextIntlClientProvider>
-          <Header />
-          <main className="min-h-screen">{children}</main>
+          <SessionProvider session={session}>
+            <Header />
+            <main className="min-h-screen">{children}</main>
+          </SessionProvider>
         </NextIntlClientProvider>
         <Footer />
       </body>
