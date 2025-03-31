@@ -5,12 +5,12 @@
 | 1. Header, Footer                    | Sergij   |
 | 2. Internationalization(Intl) / Auth | Sergij   | 👁‍🗨 /on process/        |
 | 3. Main Page                         | Sergij   |
-| 4. Client Page                       |
-| - method selector                    | ❔       |
-| - text input for the endpoint URL    | ❔       |
-| - headers editor                     | ❔       |
-| - response section                   | ❔       |
-| - generated code section             | ❔       |
+| 4. Client Page                       | Nastya   | 👁‍🗨 /on process/        |
+| - method selector                    | Nastya   | 👁‍🗨 /on process/        |
+| - text input for the endpoint URL    | Nastya   | 👁‍🗨 /on process/        |
+| - headers editor                     | Nastya   |
+| - response section                   | Nastya   |
+| - generated code section             | Nastya   |
 | 5. Variables page                    | ❔       |
 | 6. History page                      | ❔       |
 
