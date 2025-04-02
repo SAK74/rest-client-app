@@ -4,5 +4,9 @@
   },
   "Welcome_Page": {
     "tittle": "Welcome, plz login... bla-bla"
+  },
+  "Client_Page": {
+    "Method": "Method",
+    "REST_Client": "REST Client"
   }
 }

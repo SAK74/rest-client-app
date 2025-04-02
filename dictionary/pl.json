@@ -4,5 +4,9 @@
   },
   "Welcome_Page": {
     "tittle": "Witamy, proszę się zalogować..."
+  },
+  "Client_Page": {
+    "Method": "Metoda",
+    "REST_Client": "REST-cliencie"
   }
 }
