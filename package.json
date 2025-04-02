@@ -11,6 +11,7 @@
     "prettier:fix": "prettier --ignore-unknown --write ."
   },
   "dependencies": {
+    "firebase": "^11.5.0",
     "next": "15.2.4",
     "next-auth": "^5.0.0-beta.25",
     "next-intl": "^4.0.2",
