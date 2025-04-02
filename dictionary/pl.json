@@ -7,6 +7,7 @@
   },
   "Client_Page": {
     "Method": "Metoda",
-    "REST_Client": "REST-cliencie"
+    "REST_Client": "REST-cliencie",
+    "Endpoint_URL": "Punkt końcowy URL"
   }
 }
