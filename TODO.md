@@ -13,5 +13,8 @@
 | - generated code section             | Nastya   |
 | 5. Variables page                    | ❔       |
 | 6. History page                      | ❔       |
+| 7. Not-found page                    | ❔       |
+| 8. errors/messages handling          | Sergij   |
+
 
 ...
