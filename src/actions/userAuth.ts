@@ -1,8 +1,8 @@
 "use server";
 
-import { UserCredentials } from "@/app/[locale]/(auth)/_components/FormComponent";
 import { signIn } from "@/auth";
 import { auth } from "@/firebase";
+import { UserCredentials } from "@/schemas";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 type ReturnType = Promise<{
@@ -10,17 +10,12 @@ type ReturnType = Promise<{
   message: string;
 }>;
 
-export async function login(data: FormData): ReturnType {
-  // console.log("In login action: ", data);
-  const { email, password } = Object.fromEntries(
-    data.entries(),
-  ) as UserCredentials;
+export async function login({ email, password }: UserCredentials): ReturnType {
   try {
     await signIn("credentials", {
       email,
       password,
       redirect: false,
-      // redirectTo: callbackUrl || DEFAULT_REDIRECT_AFTER_LOGIN_REGISTER,
     });
     return { success: true, message: "Loggin successfully" };
   } catch (err) {
@@ -31,17 +26,14 @@ export async function login(data: FormData): ReturnType {
   }
 }
 
-export async function register(data: FormData): ReturnType {
-  // console.log("In register action: ", data);
-  const { email, password } = Object.fromEntries(data.entries()) as {
-    email: string;
-    password: string;
-  };
+export async function register({
+  email,
+  password,
+}: UserCredentials): ReturnType {
   try {
     const {
       user: { email: createdMail },
     } = await createUserWithEmailAndPassword(auth, email, password);
-    // console.log({ createdMail });
     return {
       success: true,
       message: `User with email ${createdMail} has been created`,

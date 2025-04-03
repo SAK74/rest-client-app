@@ -22,7 +22,6 @@ export const authConfig = {
         },
       },
       authorize: async (credentials) => {
-        // console.log("In auth authorize: ", credentials);
         const { email, password } = credentials as {
           email: string;
           password: string;
@@ -56,10 +55,7 @@ export const authConfig = {
   },
   events: {
     signOut() {
-      // console.log("Sign OUT");
-      // console.log(message);
       signOut(auth);
-      // console.log("--------------");
     },
   },
 } satisfies NextAuthConfig;

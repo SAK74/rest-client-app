@@ -4,5 +4,13 @@
   },
   "Welcome_Page": {
     "tittle": "Witamy, proszę się zalogować..."
+  },
+  "Login_Form": {
+    "login_tittle": "Zaloguj się, proszę",
+    "register_tittle": "Zarejestruj konto",
+    "login_link": "Nie masz konta? Zarejestruj się!",
+    "register_link": "Masz konto? Zaloguj się!",
+    "submit_btn": "Zatwierdź",
+    "login_with_provider": "Albo załoguj się przez"
   }
 }
