@@ -7,6 +7,7 @@ import Header from "../_components/Header";
 import Footer from "../_components/Footer";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Rest-client",
@@ -27,13 +28,14 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang={locale}>
-      <body>
+      <body className="dark">
         <NextIntlClientProvider>
           <SessionProvider session={session}>
             <Header />
             <main className="min-h-screen">{children}</main>
           </SessionProvider>
         </NextIntlClientProvider>
+        <Toaster />
         <Footer />
       </body>
     </html>

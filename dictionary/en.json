@@ -8,6 +8,15 @@
   "Client_Page": {
     "Method": "Method",
     "REST_Client": "REST Client",
-    "Endpoint_URL": "Endpoint URL"
+    "Endpoint_URL": "Endpoint URL",
+    "send_btn": "Send"
+  },
+  "Login_Form": {
+    "login_tittle": "Login, please",
+    "register_tittle": "Register account",
+    "login_link": "Do not have account? Register!",
+    "register_link": "Have account? Login!",
+    "submit_btn": "Submit",
+    "login_with_provider": "Or log in with"
   }
 }
