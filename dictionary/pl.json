@@ -1,6 +1,7 @@
 {
   "Header": {
-    "tittle": "Witamy w rest-cliencie!"
+    "tittle": "Witamy w rest-cliencie!",
+    "login_register": "Logowanie/rejestracja"
   },
   "Welcome_Page": {
     "tittle": "Witamy, proszę się zalogować..."

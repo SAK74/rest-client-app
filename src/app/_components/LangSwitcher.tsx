@@ -23,7 +23,9 @@ export default function LangSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={"outline"}>{locale}</Button>
+        <Button variant={"outline"} size={"icon"}>
+          {locale}
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="">
         {routing.locales.map((lang) => (
