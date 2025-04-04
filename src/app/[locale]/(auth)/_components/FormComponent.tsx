@@ -26,16 +26,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ExternalToast, toast } from "sonner";
+import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import Socials from "./Socials";
 import { Separator } from "@/components/ui/separator";
-
-export const toastType: ExternalToast = {
-  duration: 3000,
-  richColors: true,
-  closeButton: true,
-};
+import { toastType } from "@/_setup";
 
 export type FormProps = {
   formType: "login" | "register";

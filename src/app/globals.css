@@ -1,7 +1,21 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* @import "./_components/header.css"; */
+/* @import "./_components/footer.css"; */
+
 @custom-variant dark (&:is(.dark *));
+
+/* custom vars */
+:root {
+  --header-height: 48px;
+  --footer-height: 36px;
+}
+@theme {
+  /* TODO: to define maybe */
+  /* --color-header: #90a1b9; */
+  /* --color-header-dark: #1d293d; */
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -40,17 +54,6 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
-@theme {
-  /* TODO: to define maybe */
-  /* --color-primary: ???; */
-}
-
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
 
 :root {
   --radius: 0.625rem;

@@ -34,7 +34,9 @@ export default async function RootLayout({
           <NextIntlClientProvider>
             <SessionProvider session={session}>
               <Header />
-              <main className="min-h-screen">{children}</main>
+              <main className="min-h-[calc(100vh-var(--header-height)-var(--footer-height))] p-6">
+                {children}
+              </main>
             </SessionProvider>
           </NextIntlClientProvider>
           <Toaster />
