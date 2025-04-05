@@ -6,6 +6,12 @@
   "Welcome_Page": {
     "tittle": "Welcome, plz login... bla-bla"
   },
+  "Client_Page": {
+    "Method": "Method",
+    "REST_Client": "REST Client",
+    "Endpoint_URL": "Endpoint URL",
+    "send_btn": "Send"
+  },
   "Login_Form": {
     "login_tittle": "Login, please",
     "register_tittle": "Register account",

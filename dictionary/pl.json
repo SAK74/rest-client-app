@@ -6,6 +6,12 @@
   "Welcome_Page": {
     "tittle": "Witamy, proszę się zalogować..."
   },
+  "Client_Page": {
+    "Method": "Metoda",
+    "REST_Client": "REST-cliencie",
+    "Endpoint_URL": "Punkt końcowy URL",
+    "send_btn": "Wyślij"
+  },
   "Login_Form": {
     "login_tittle": "Zaloguj się, proszę",
     "register_tittle": "Zarejestruj konto",
