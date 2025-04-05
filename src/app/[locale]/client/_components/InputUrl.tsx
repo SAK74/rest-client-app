@@ -17,6 +17,8 @@ export default function InputUrl() {
 
   const [method, setMethod] = useState<string | undefined>(methodValue);
 
+  const [url, setUrl] = useState<string>("");
+
   const handleMethodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     setMethod(value);
@@ -25,6 +27,10 @@ export default function InputUrl() {
     } else {
       router.push(`${pathname}/${value}`, { scroll: false });
     }
+  };
+
+  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUrl(event.target.value);
   };
 
   return (
@@ -37,7 +43,12 @@ export default function InputUrl() {
       />
       <div>
         <label htmlFor="url">Endpoint URL</label>
-        <Input id="url" placeholder="Type URL here..." />
+        <Input
+          id="url"
+          placeholder="Type URL here..."
+          value={url}
+          onChange={handleUrlChange}
+        />
       </div>
       <Button>Send</Button>
     </div>

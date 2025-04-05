@@ -1,5 +1,9 @@
+"use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Table } from "@/components/ui/table";
+import { Modal } from "@/components/ui/modal";
+import { Input } from "@/components/ui/input";
 
 import {
   CardAction,
@@ -8,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default async function Headers() {
+export default function Headers() {
   const data = [
     { id: 1, key: "key 1", value: "key 1" },
     { id: 2, key: "key 2", value: "key 2" },
@@ -20,12 +24,14 @@ export default async function Headers() {
     { id: 2, value: "Value" },
   ];
 
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div>
       <CardHeader className="px-0">
         <CardTitle>Headers:</CardTitle>
         <CardAction>
-          <Button>Add Header</Button>
+          <Button onClick={() => setIsOpen(true)}>Add Header</Button>
         </CardAction>
       </CardHeader>
       <CardContent className="px-0 py-6">
@@ -44,6 +50,26 @@ export default async function Headers() {
           }
         />
       </CardContent>
+
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="New Header"
+      >
+        <CardContent className="grid gap-4">
+          <div>
+            <label htmlFor="key">Key</label>
+            <Input id="key" />
+          </div>
+          <div>
+            <label htmlFor="value">Value</label>
+            <Input id="value" />
+          </div>
+          <Button className="bg-green-500 hover:bg-green-400">
+            Add Header
+          </Button>
+        </CardContent>
+      </Modal>
     </div>
   );
 }
