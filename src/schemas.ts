@@ -35,9 +35,9 @@ export const registerSchema = credentialsSchema
 
 export type UserCredentials = z.infer<typeof credentialsSchema>;
 
-export const restClientSchema = z.object({
-  method: z.string().min(1, "Method is required"),
-  api_url: z.string().min(1, "URL is required"),
+export const restClientHeaderSchema = z.object({
+  key: z.string().min(1, "Key is required"),
+  value: z.string().min(1, "Value is required"),
 });
 
-export type RestClient = z.infer<typeof restClientSchema>;
+export type RestClientHeader = z.infer<typeof restClientHeaderSchema>;

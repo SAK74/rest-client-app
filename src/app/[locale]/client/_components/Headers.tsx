@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Table } from "@/components/ui/table";
 import { Modal } from "@/components/ui/modal";
@@ -12,19 +14,46 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function Headers() {
-  const data = [
-    { id: 1, key: "key 1", value: "key 1" },
-    { id: 2, key: "key 2", value: "key 2" },
-    { id: 3, key: "key 3", value: "key 3" },
-  ];
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
+import { RestClientHeader, restClientHeaderSchema } from "@/schemas";
+
+interface DataItem {
+  id: number;
+  key: string;
+  value: string;
+}
+
+export default function Headers() {
   const headers = [
     { id: 1, value: "Key" },
     { id: 2, value: "Value" },
   ];
 
   const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState<DataItem[]>([]);
+
+  const form = useForm({
+    resolver: zodResolver(restClientHeaderSchema),
+    mode: "all",
+    defaultValues: {
+      key: "",
+      value: "",
+    },
+  });
+
+  const addNewHeader = async ({ key, value }: RestClientHeader) => {
+    const newData = [...data, { id: data.length, key, value }];
+    setData(newData);
+    setIsOpen(false);
+  };
 
   return (
     <div>
@@ -57,17 +86,42 @@ export default function Headers() {
         title="New Header"
       >
         <CardContent className="grid gap-4">
-          <div>
-            <label htmlFor="key">Key</label>
-            <Input id="key" />
-          </div>
-          <div>
-            <label htmlFor="value">Value</label>
-            <Input id="value" />
-          </div>
-          <Button className="bg-green-500 hover:bg-green-400">
-            Add Header
-          </Button>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(addNewHeader)}
+              className="space-y-4"
+            >
+              <FormField
+                control={form.control}
+                name="key"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Key</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="key" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="value"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Value</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="value" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button className="bg-green-500 hover:bg-green-400">
+                Add Header
+              </Button>
+            </form>
+          </Form>
         </CardContent>
       </Modal>
     </div>
