@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Headers from "./_components/Headers";
-import InputUrl from "./_components/InputUrl";
+import Headers from "../_components/Headers";
+import InputUrl from "../_components/InputUrl";
 
 export default async function ClientPage() {
   const t = await getTranslations("Client_Page");
