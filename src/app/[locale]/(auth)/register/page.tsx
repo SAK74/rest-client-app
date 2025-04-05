@@ -1,3 +1,5 @@
-export default function Register() {
-  return <main>Register page</main>;
+import Form from "../_components/FormComponent";
+
+export default function RegisterPage() {
+  return <Form formType="register" />;
 }

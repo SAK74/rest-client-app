@@ -1,8 +1,23 @@
 {
   "Header": {
-    "tittle": "Witamy w rest-cliencie!"
+    "tittle": "Witamy w rest-cliencie!",
+    "login_register": "Logowanie/rejestracja"
   },
   "Welcome_Page": {
     "tittle": "Witamy, proszę się zalogować..."
+  },
+  "Client_Page": {
+    "Method": "Metoda",
+    "REST_Client": "REST-cliencie",
+    "Endpoint_URL": "Punkt końcowy URL",
+    "send_btn": "Wyślij"
+  },
+  "Login_Form": {
+    "login_tittle": "Zaloguj się, proszę",
+    "register_tittle": "Zarejestruj konto",
+    "login_link": "Nie masz konta? Zarejestruj się!",
+    "register_link": "Masz konto? Zaloguj się!",
+    "submit_btn": "Zatwierdź",
+    "login_with_provider": "Albo załoguj się przez"
   }
 }
