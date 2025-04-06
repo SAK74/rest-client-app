@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
 import dynamic from "next/dynamic";
 
 const VariablesClient = dynamic(() => import("./VariablesClient"), {
@@ -13,7 +13,10 @@ export default async function VariablesPage({
 }) {
   const session = await auth();
   if (!session) {
-    redirect(`/${params.locale}/login`);
+    redirect({
+      href: "/login",
+      locale: params.locale,
+    });
   }
 
   return <VariablesClient />;
