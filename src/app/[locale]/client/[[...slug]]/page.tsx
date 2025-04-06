@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Headers from "../_components/Headers";
 import InputUrl from "../_components/InputUrl";
@@ -29,6 +30,17 @@ export default async function ClientPage() {
         </CardHeader>
         <CardContent></CardContent>
       </Card>
+      <div
+        style={{
+          marginTop: "2rem",
+          padding: "1rem",
+          borderTop: "1px solid #ddd",
+        }}
+      >
+        <Link href="/en/variables">
+          <button>Go to Variables</button>
+        </Link>
+      </div>
     </div>
   );
 }
