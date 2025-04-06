@@ -6,7 +6,7 @@ import { DEFAULT_REDIRECT_AFTER_LOGIN } from "@/routes";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { type FC } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import {
   Card,
   CardContent,
