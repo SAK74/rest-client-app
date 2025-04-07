@@ -27,7 +27,7 @@ import {
 import { RestClientHeader, restClientHeaderSchema } from "@/schemas";
 
 interface DataItem {
-  id: string | number;
+  id: string | number | null;
   key: string;
   value: string;
 }
@@ -37,11 +37,17 @@ const headers = [
   { id: 2, value: "Value" },
 ];
 
+const defaultValues = {
+  key: "",
+  value: "",
+};
+
 export default function Headers() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [updatedItem, setUpdatedItem] = useState<DataItem | null>(null);
   const [data, setData] = useState<DataItem[]>([]);
 
   useEffect(() => {
@@ -62,15 +68,12 @@ export default function Headers() {
   const form = useForm({
     resolver: zodResolver(restClientHeaderSchema),
     mode: "all",
-    defaultValues: {
-      key: "",
-      value: "",
-    },
+    defaultValues,
   });
 
   const addNewHeader = async ({ key, value }: RestClientHeader) => {
     addParam({ key, value });
-    setIsOpen(false);
+    handleClose();
   };
 
   const addParam = ({ key, value }: RestClientHeader) => {
@@ -89,13 +92,16 @@ export default function Headers() {
     router.replace(`?${params.toString()}`);
   };
 
-  // const updateHeader = async (value: DataItem) => {};
+  const updateHeader = async ({ key, value }: RestClientHeader) => {
+    handleClose();
+    addParam({ key, value });
+  };
 
-  // const updateParam = ({ key, value }: RestClientHeader) => {
-  //   const params = new URLSearchParams(searchParams.toString());
-  //   params.set(key, value);
-  //   router.replace(`?${params.toString()}`);
-  // };
+  const handleClose = () => {
+    setIsOpen(false);
+    setUpdatedItem(null);
+    form.reset(defaultValues);
+  };
 
   return (
     <div>
@@ -112,7 +118,11 @@ export default function Headers() {
           actions={(row) => (
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
               <button
-                onClick={() => updateHeader(row)}
+                onClick={() => {
+                  form.reset(row);
+                  setUpdatedItem(row);
+                  setIsOpen(true);
+                }}
                 className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3"
               >
                 Edit
@@ -130,13 +140,15 @@ export default function Headers() {
 
       <Modal
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        title="New Header"
+        onClose={handleClose}
+        title={updatedItem ? "Update Header" : "New Header"}
       >
         <CardContent className="grid gap-4">
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(addNewHeader)}
+              onSubmit={form.handleSubmit(
+                updatedItem ? updateHeader : addNewHeader,
+              )}
               className="space-y-4"
             >
               <FormField
@@ -146,7 +158,11 @@ export default function Headers() {
                   <FormItem>
                     <FormLabel>Key</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="key" />
+                      <Input
+                        {...field}
+                        placeholder="key"
+                        disabled={!!updatedItem}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -166,7 +182,7 @@ export default function Headers() {
                 )}
               />
               <Button className="bg-green-500 hover:bg-green-400">
-                Add Header
+                {updatedItem ? "Update Header" : "Add Header"}
               </Button>
             </form>
           </Form>

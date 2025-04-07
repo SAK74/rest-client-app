@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface TableData {
-  id: string | number;
+  id: string | number | null;
   key: string;
   value: string;
 }
