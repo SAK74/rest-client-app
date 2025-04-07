@@ -13,6 +13,7 @@ import { ThemeProvider } from "next-themes";
 export const metadata: Metadata = {
   title: "Rest-client",
   description: "Rest-client-app",
+  icons: { icon: "/rest_logo.png" },
 };
 
 export default async function RootLayout({
