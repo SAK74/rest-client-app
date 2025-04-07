@@ -5,21 +5,18 @@ import Select from "@/components/ui/select";
 import { Methods } from "@/app/_constants/methods";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import { getVariables } from "@/lib/getVariables";
 // import { replaceVariables } from "@/lib/replaceVariables";
 
 const SelectOptions = Methods.map((item) => ({ label: item, value: item }));
 
 /*
-async function sendRequest(url: string, method: string, body: string, headers: Record<string, string>) {
-  const variables = getVariables();
-
-  const finalUrl = replaceVariables(url, variables);
-  const finalBody = replaceVariables(body, variables);
+export async function sendRequest(url: string, method: string, body: string, headers: Record<string, string>) {
+  const finalUrl = replaceVariables(url);
+  const finalBody = replaceVariables(body);
 
   const finalHeaders: Record<string, string> = {};
   for (const [key, value] of Object.entries(headers)) {
-    finalHeaders[key] = replaceVariables(value, variables);
+    finalHeaders[key] = replaceVariables(value);
   }
 
   console.log("Final URL:", finalUrl);

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Link } from "@/i18n/navigation";
 
 const STORAGE_KEY = "rest_client_variables";
 
@@ -12,21 +13,17 @@ export default function VariablesClient() {
   const [newValue, setNewValue] = useState("");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        try {
-          const parsed = JSON.parse(raw);
-          setVariables(parsed);
-        } catch {}
-      }
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        setVariables(parsed);
+      } catch {}
     }
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(variables));
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(variables));
   }, [variables]);
 
   const handleAdd = () => {
@@ -43,31 +40,36 @@ export default function VariablesClient() {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Manage Variables</h2>
+    <div className="flex flex-col gap-8 py-4 items-center">
+      <div style={{ padding: "1rem" }}>
+        <h2>Manage Variables</h2>
 
-      <div style={{ marginTop: "1rem" }}>
-        <input
-          placeholder="Variable name"
-          value={newKey}
-          onChange={(e) => setNewKey(e.target.value)}
-        />
-        <input
-          placeholder="Variable value"
-          value={newValue}
-          onChange={(e) => setNewValue(e.target.value)}
-        />
-        <button onClick={handleAdd}>Add/Update</button>
+        <div style={{ marginTop: "1rem" }}>
+          <input
+            placeholder="Variable name"
+            value={newKey}
+            onChange={(e) => setNewKey(e.target.value)}
+          />
+          <input
+            placeholder="Variable value"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+          />
+          <button onClick={handleAdd}>Add/Update</button>
+        </div>
+
+        <ul style={{ marginTop: "1rem" }}>
+          {Object.entries(variables).map(([k, v]) => (
+            <li key={k} style={{ marginBottom: "0.5rem" }}>
+              <strong>{k}</strong> = {v}{" "}
+              <button onClick={() => handleDelete(k)}>Delete</button>
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <ul style={{ marginTop: "1rem" }}>
-        {Object.entries(variables).map(([k, v]) => (
-          <li key={k} style={{ marginBottom: "0.5rem" }}>
-            <strong>{k}</strong> = {v}{" "}
-            <button onClick={() => handleDelete(k)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <Link href="/client">
+        <button>Go to Client</button>
+      </Link>
     </div>
   );
 }
