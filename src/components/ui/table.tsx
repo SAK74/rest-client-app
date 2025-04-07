@@ -14,7 +14,7 @@ interface TableHeader {
 interface TableProps {
   data: TableData[];
   headers: TableHeader[];
-  actions?: ReactNode;
+  actions?: (row: TableData) => ReactNode;
 }
 
 function Table({ data, headers, actions }: TableProps) {
@@ -51,7 +51,7 @@ function Table({ data, headers, actions }: TableProps) {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                 {item.value}
               </td>
-              {!!actions && actions}
+              {!!actions && actions(item)}
             </tr>
           ))}
         </tbody>
