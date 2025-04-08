@@ -1,7 +1,6 @@
 import { FC } from "react";
 
-const BodyEditor: FC<{ body?: string }> = ({ body }) => {
-  const decoded = atob(body || "");
+const BodyEditor: FC<{ decodedBody?: string }> = ({ decodedBody }) => {
   const onChange = () => {
     // can do it controlled or anymore...
   };
@@ -12,7 +11,7 @@ const BodyEditor: FC<{ body?: string }> = ({ body }) => {
     // similar to url input
   };
   // use tool json-editor or similar instead textarea
-  return <textarea value={decoded} onChange={onChange}></textarea>;
+  return <textarea value={decodedBody} onChange={onChange}></textarea>;
 };
 
 export default BodyEditor;

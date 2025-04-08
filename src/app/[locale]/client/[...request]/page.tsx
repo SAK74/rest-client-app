@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import BodyEditor from "../_components/BodyEditor";
 import ResponseView from "../_components/ResponseView";
 import CodeViewer from "../_components/CodeView";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 // try to type http://localhost:3000/client/POST/aHR0cHM6Ly9qc29ucGxhY2Vob2xkZXIudHlwaWNvZGUuY29tL3Bvc3Rz/eyJ0aXRsZSI6ImZha2VUaXRsZSIsInVzZXJJZCI6MSwiYm9keSI6ImZha2VNZXNzYWdlIn0=?Content-Type=application%2Fjson
 
@@ -23,8 +24,28 @@ export default function Page({
   console.log({ request, _headers });
   const [method, url, body] = request;
 
-  const urlPlain = decodeURIComponent(url || "");
-  const bodyPlain = decodeURIComponent(body || "");
+  const pathname = usePathname();
+  const pathnameArr = pathname.split("/");
+  const router = useRouter();
+
+  const onMethodChange = (method: string) => {
+    pathnameArr[2] = method;
+    router.replace(
+      { pathname: pathnameArr.join("/"), query: _headers },
+      { scroll: false },
+    );
+  };
+
+  const urlDecoded = url && atob(decodeURIComponent(url));
+  const onUrlChange = (url: string) => {
+    pathnameArr[3] = encodeURIComponent(btoa(url));
+    router.replace(
+      { pathname: pathnameArr.join("/"), query: _headers },
+      { scroll: false },
+    );
+  };
+
+  const bodyDecoded = body && atob(decodeURIComponent(body));
 
   //eslint-disable-next-line
   const [response, setResponse] = useState<Promise<Response> | undefined>();
@@ -32,8 +53,6 @@ export default function Page({
   const onGo = () => {
     //method = method
     //
-    // const url = atob(bodyPlain);
-    // const body = atob(bodyPlain);
     // TODO: variables insertion
     // TODO: create route handlers and
     // const response = fetch(`/api/request?url=${url}`, {
@@ -48,10 +67,10 @@ export default function Page({
     <main className="flex flex-col gap-6">
       <section className="flex gap-6">
         {/* Request section */}
-        <Method method={method} />
-        <UrlInput url={urlPlain} />
+        <Method method={method} onMethodChange={onMethodChange} />
+        <UrlInput decodedUrl={urlDecoded} onUrlChange={onUrlChange} />
         <HeadersHandler _headers={_headers} />
-        <BodyEditor body={bodyPlain} />
+        <BodyEditor decodedBody={bodyDecoded} />
         <CodeViewer />
         <Button onClick={onGo}>Go!</Button>
       </section>
