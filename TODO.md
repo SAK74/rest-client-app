@@ -11,10 +11,9 @@
 | - headers editor                     | Nastya   |
 | - response section                   | Nastya   |
 | - generated code section             | Nastya   |
-| 5. Variables page                    | ❔       |
+| 5. Variables page                    | Vladimir | 👁‍🗨 /on process/        |
 | 6. History page                      | ❔       |
-| 7. Not-found page                    | ❔       |
+| 7. Not-found page                    | Vladimir | 👁‍🗨 /on process/        |
 | 8. errors/messages handling          | Sergij   |
-
 
 ...
