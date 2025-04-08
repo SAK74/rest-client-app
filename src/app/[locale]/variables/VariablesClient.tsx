@@ -41,10 +41,10 @@ export default function VariablesClient() {
 
   return (
     <div className="flex flex-col gap-8 py-4 items-center">
-      <div style={{ padding: "1rem" }}>
+      <div className="p-4">
         <h2>Manage Variables</h2>
 
-        <div style={{ marginTop: "1rem" }}>
+        <div className="mt-4">
           <input
             placeholder="Variable name"
             value={newKey}
@@ -58,9 +58,9 @@ export default function VariablesClient() {
           <button onClick={handleAdd}>Add/Update</button>
         </div>
 
-        <ul style={{ marginTop: "1rem" }}>
+        <ul className="mt-4">
           {Object.entries(variables).map(([k, v]) => (
-            <li key={k} style={{ marginBottom: "0.5rem" }}>
+            <li key={k} className="mb-2">
               <strong>{k}</strong> = {v}{" "}
               <button onClick={() => handleDelete(k)}>Delete</button>
             </li>
