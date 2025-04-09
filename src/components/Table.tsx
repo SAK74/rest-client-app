@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface TableData {
-  id: string | number | null;
+  id: string | number;
   key: string;
   value: string;
 }
@@ -44,7 +44,7 @@ function Table({ data, headers, actions }: TableProps) {
         </thead>
         <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
           {data.map((item) => (
-            <tr key={item.id}>
+            <tr key={item.key}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                 {item.key}
               </td>
