@@ -10,12 +10,7 @@ interface SelectProps {
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export default function Select({
-  options,
-  label,
-  onChange,
-  value,
-}: SelectProps) {
+export function Select({ options, label, onChange, value }: SelectProps) {
   return (
     <div>
       <label>{label}</label>
