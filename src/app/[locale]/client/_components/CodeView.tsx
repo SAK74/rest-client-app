@@ -1,13 +1,132 @@
-"use client";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { type FC, startTransition, useEffect, useRef, useState } from "react";
+import codegen, { getLanguageList } from "postman-code-generators";
+import { Request, Header, RequestBodyDefinition } from "postman-collection";
+import { cn } from "@/lib/utils";
 
-export default function Code() {
-  return (
-    <div>
-      <CardHeader className="px-0">
-        <CardTitle>Code:</CardTitle>
-      </CardHeader>
-      <CardContent className="px-0 py-6"></CardContent>
-    </div>
+const CodeViewer: FC<unknown> = () => {
+  const header = new Header({ key: "Content-type", value: "application/json" });
+  const body: RequestBodyDefinition = {
+    mode: "raw",
+    // raw: JSON.stringify({ data: { x: 1, y: 2 } }),
+    raw: JSON.stringify({ data: { x: 1, y: 2 } }),
+  };
+  // console.log({ header, body });
+
+  const request = new Request({
+    url: "https://google.com",
+    method: "POST",
+    header: [header],
+    body,
+  });
+  const supportedLang = codegen.getLanguageList();
+
+  // codegen.getOptions("nodejs", "Request", (err, opt) => {
+  //   console.log({ opt });
+  // });
+
+  // console.log({ supportedLang });
+
+  const [language, setLanguage] =
+    useState<ReturnType<typeof getLanguageList>[number]["key"]>("nodejs");
+  const [variant, setVariant] = useState<
+    (typeof supportedLang)[number]["variants"][number]["key"]
+  >(
+    "",
+    // () => supportedLang.find(({ key }) => key === language)!.variants[0].key,
   );
-}
+
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    // startTransition(() => {
+    setVariant(
+      supportedLang.find(({ key }) => key === language)!.variants[0].key,
+    );
+    // });
+  }, [language]);
+
+  // const [data, setData] = useState("some data");
+  const textRef = useRef<HTMLTextAreaElement | null>(null);
+  console.log({ language, variant });
+
+  useEffect(() => {
+    codegen.convert(
+      language,
+      variant,
+      request,
+      { ES6_enabled: true, indentCount: 3 },
+      (err, snipp) => {
+        if (err) {
+          let message = "Error of code generating";
+          console.log({ err });
+          if (typeof err === "string") {
+            message = err;
+          } else if (err instanceof Error) {
+            message = err.message;
+          }
+          if (textRef.current) {
+            setIsError(true);
+            textRef.current.value = message;
+            // textRef.current.style.color = "red";
+          }
+        } else {
+          // console.log("Code: ", snipp);
+          setIsError(false);
+          if (textRef.current) {
+            textRef.current.value = snipp;
+          }
+          // setData(snipp);
+        }
+      },
+    );
+  }, [variant]);
+
+  return (
+    <>
+      <select
+        value={language}
+        onChange={({ target: { value } }) => {
+          // startTransition(() => {
+          setLanguage(value);
+          // });
+        }}
+      >
+        {supportedLang.map(({ key, label }) => (
+          <option key={key} value={key}>
+            {label}
+          </option>
+        ))}
+      </select>
+      <select
+        value={variant}
+        onChange={({ target: { value } }) => {
+          startTransition(() => {
+            setVariant(value);
+          });
+        }}
+      >
+        {supportedLang
+          .find(({ key }) => key === language)
+          ?.variants.map(({ key }) => (
+            <option key={key} value={key}>
+              {key}
+            </option>
+          ))}
+      </select>
+      <h3>Generated code:</h3>
+      {/* <code>{data}</code> */}
+      {/* <p>{data}</p> */}
+      <textarea
+        readOnly
+        spellCheck="false"
+        rows={20}
+        ref={textRef}
+        defaultValue={""}
+        // onChange={() => {}}
+        className={cn("p-4", { "text-destructive": isError })}
+      ></textarea>
+    </>
+  );
+};
+
+export default CodeViewer;
