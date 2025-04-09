@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Table } from "@/components/ui/table";
@@ -26,33 +27,80 @@ import {
 import { RestClientHeader, restClientHeaderSchema } from "@/schemas";
 
 interface DataItem {
-  id: number;
+  id: string | number | null;
   key: string;
   value: string;
 }
 
+const headers = [
+  { id: 1, value: "Key" },
+  { id: 2, value: "Value" },
+];
+
+const defaultValues = {
+  key: "",
+  value: "",
+};
+
 export default function Headers() {
-  const headers = [
-    { id: 1, value: "Key" },
-    { id: 2, value: "Value" },
-  ];
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [updatedItem, setUpdatedItem] = useState<DataItem | null>(null);
   const [data, setData] = useState<DataItem[]>([]);
+
+  useEffect(() => {
+    const paramsArray: DataItem[] = [];
+    let id = 1;
+
+    searchParams.forEach((value, key) => {
+      paramsArray.push({
+        id: id++,
+        key,
+        value,
+      });
+    });
+
+    setData(paramsArray);
+  }, [searchParams]);
 
   const form = useForm({
     resolver: zodResolver(restClientHeaderSchema),
     mode: "all",
-    defaultValues: {
-      key: "",
-      value: "",
-    },
+    defaultValues,
   });
 
   const addNewHeader = async ({ key, value }: RestClientHeader) => {
-    const newData = [...data, { id: data.length, key, value }];
-    setData(newData);
+    addParam({ key, value });
+    handleClose();
+  };
+
+  const addParam = ({ key, value }: RestClientHeader) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(key, value);
+    router.push(`?${params.toString()}`);
+  };
+
+  const removeHeader = async (value: DataItem) => {
+    removeParam(value.key);
+  };
+
+  const removeParam = (paramName: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete(paramName);
+    router.replace(`?${params.toString()}`);
+  };
+
+  const updateHeader = async ({ key, value }: RestClientHeader) => {
+    handleClose();
+    addParam({ key, value });
+  };
+
+  const handleClose = () => {
     setIsOpen(false);
+    setUpdatedItem(null);
+    form.reset(defaultValues);
   };
 
   return (
@@ -67,28 +115,40 @@ export default function Headers() {
         <Table
           data={data}
           headers={headers}
-          actions={
+          actions={(row) => (
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <button className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">
+              <button
+                onClick={() => {
+                  form.reset(row);
+                  setUpdatedItem(row);
+                  setIsOpen(true);
+                }}
+                className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3"
+              >
                 Edit
               </button>
-              <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+              <button
+                onClick={() => removeHeader(row)}
+                className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+              >
                 Delete
               </button>
             </td>
-          }
+          )}
         />
       </CardContent>
 
       <Modal
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        title="New Header"
+        onClose={handleClose}
+        title={updatedItem ? "Update Header" : "New Header"}
       >
         <CardContent className="grid gap-4">
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(addNewHeader)}
+              onSubmit={form.handleSubmit(
+                updatedItem ? updateHeader : addNewHeader,
+              )}
               className="space-y-4"
             >
               <FormField
@@ -98,7 +158,11 @@ export default function Headers() {
                   <FormItem>
                     <FormLabel>Key</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="key" />
+                      <Input
+                        {...field}
+                        placeholder="key"
+                        disabled={!!updatedItem}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,7 +182,7 @@ export default function Headers() {
                 )}
               />
               <Button className="bg-green-500 hover:bg-green-400">
-                Add Header
+                {updatedItem ? "Update Header" : "Add Header"}
               </Button>
             </form>
           </Form>
