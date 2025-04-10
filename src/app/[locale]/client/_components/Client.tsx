@@ -104,7 +104,14 @@ export default function ClientPage() {
                 <Body body={bodyDecoded} onBodyChange={onBodyChange} />
               </TabsContent>
               <TabsContent value="code">
-                <Code />
+                <Code
+                  {...{
+                    _headers: query,
+                    _method: method,
+                    _url: urlDecoded,
+                    _body: bodyDecoded,
+                  }}
+                />
               </TabsContent>
             </Tabs>
           </CardContent>

@@ -2,23 +2,41 @@ import { type FC, startTransition, useEffect, useRef, useState } from "react";
 import codegen, { getLanguageList } from "postman-code-generators";
 import { Request, Header, RequestBodyDefinition } from "postman-collection";
 import { cn } from "@/lib/utils";
+import { Methods } from "@/app/_constants/methods";
+import { Textarea } from "@/components/ui/textarea";
+import { Select } from "@/components";
 
-const CodeViewer: FC<unknown> = () => {
-  const header = new Header({ key: "Content-type", value: "application/json" });
+type CodeParams = {
+  _url: string;
+  _headers: { [k: string]: string };
+  _body?: string;
+  _method: (typeof Methods)[number];
+};
+
+const supportedLang = codegen.getLanguageList();
+
+const CodeViewer: FC<CodeParams> = ({ _headers, _url, _body, _method }) => {
+  // console.log({ _body });
+
+  // const header = new Header({ key: "Content-type", value: "application/json" });
+  const header = Object.entries(_headers).map(
+    ([key, value]) => new Header({ key, value }),
+  );
   const body: RequestBodyDefinition = {
     mode: "raw",
     // raw: JSON.stringify({ data: { x: 1, y: 2 } }),
-    raw: JSON.stringify({ data: { x: 1, y: 2 } }),
+    // raw: JSON.stringify({ data: { x: 1, y: 2 } }),
+    raw: _body,
   };
   // console.log({ header, body });
 
   const request = new Request({
-    url: "https://google.com",
-    method: "POST",
-    header: [header],
+    // url: "https://google.com",
+    url: _url,
+    method: _method,
+    header,
     body,
   });
-  const supportedLang = codegen.getLanguageList();
 
   // codegen.getOptions("nodejs", "Request", (err, opt) => {
   //   console.log({ opt });
@@ -31,7 +49,7 @@ const CodeViewer: FC<unknown> = () => {
   const [variant, setVariant] = useState<
     (typeof supportedLang)[number]["variants"][number]["key"]
   >(
-    "",
+    "Request",
     // () => supportedLang.find(({ key }) => key === language)!.variants[0].key,
   );
 
@@ -83,40 +101,53 @@ const CodeViewer: FC<unknown> = () => {
 
   return (
     <>
-      <select
-        value={language}
-        onChange={({ target: { value } }) => {
-          // startTransition(() => {
-          setLanguage(value);
-          // });
-        }}
-      >
-        {supportedLang.map(({ key, label }) => (
-          <option key={key} value={key}>
-            {label}
-          </option>
-        ))}
-      </select>
-      <select
-        value={variant}
-        onChange={({ target: { value } }) => {
-          startTransition(() => {
-            setVariant(value);
-          });
-        }}
-      >
-        {supportedLang
-          .find(({ key }) => key === language)
-          ?.variants.map(({ key }) => (
+      <div className="float-right">
+        <Select
+          label="Lang"
+          value={language}
+          onChange={(val) => {
+            setLanguage(val);
+          }}
+          options={supportedLang.map(({ key, label }) => ({
+            label,
+            value: key,
+          }))}
+        />
+        <select
+          value={language}
+          onChange={({ target: { value } }) => {
+            // startTransition(() => {
+            setLanguage(value);
+            // });
+          }}
+        >
+          {supportedLang.map(({ key, label }) => (
             <option key={key} value={key}>
-              {key}
+              {label}
             </option>
           ))}
-      </select>
-      <h3>Generated code:</h3>
+        </select>
+        <select
+          value={variant}
+          onChange={({ target: { value } }) => {
+            startTransition(() => {
+              setVariant(value);
+            });
+          }}
+        >
+          {supportedLang
+            .find(({ key }) => key === language)
+            ?.variants.map(({ key }) => (
+              <option key={key} value={key}>
+                {key}
+              </option>
+            ))}
+        </select>
+      </div>
+
       {/* <code>{data}</code> */}
       {/* <p>{data}</p> */}
-      <textarea
+      <Textarea
         readOnly
         spellCheck="false"
         rows={20}
@@ -124,7 +155,7 @@ const CodeViewer: FC<unknown> = () => {
         defaultValue={""}
         // onChange={() => {}}
         className={cn("p-4", { "text-destructive": isError })}
-      ></textarea>
+      ></Textarea>
     </>
   );
 };
