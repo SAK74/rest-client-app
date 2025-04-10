@@ -13,17 +13,18 @@ interface SelectOption {
 
 interface SelectProps {
   value?: string;
-  label: string;
+  label?: string;
   options: SelectOption[];
   onChange: (value: string) => void;
+  size?: "sm" | "default";
 }
 
-export function Select({ options, label, onChange, value }: SelectProps) {
+export function Select({ options, label, onChange, value, size }: SelectProps) {
   return (
     <div>
-      <label>{label}</label>
+      {label && <label>{label}</label>}
       <SelectUi onValueChange={onChange} value={value}>
-        <SelectTrigger>
+        <SelectTrigger size={size}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
