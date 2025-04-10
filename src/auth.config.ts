@@ -1,9 +1,10 @@
-import { type NextAuthConfig } from "next-auth";
+import { AuthError, type NextAuthConfig } from "next-auth";
 import github from "next-auth/providers/github";
 import credentials from "next-auth/providers/credentials";
 import { intlMiddleware } from "./i18n/routing";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "./firebase";
+import { FirebaseError } from "firebase/app";
 
 export const authConfig = {
   pages: { signIn: "/login" },
@@ -35,9 +36,11 @@ export const authConfig = {
             );
             return firebase.user;
           } catch (err) {
-            console.log("Firebase error:");
-            console.log(err);
-            return null;
+            let message = "Firebase error";
+            if (err instanceof FirebaseError) {
+              message = err.message;
+            }
+            throw new AuthError(message, { cause: err });
           }
         }
         return null;
