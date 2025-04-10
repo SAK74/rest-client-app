@@ -10,8 +10,7 @@ const InputUrl: FC<{
   url: string;
   onUrlChange: (url: string) => void;
 }> = ({ method, onMethodChange, url, onUrlChange }) => {
-  const handleMethodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
+  const handleMethodChange = (value: string) => {
     onMethodChange(value);
   };
 

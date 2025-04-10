@@ -28,8 +28,7 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
     }
   };
 
-  const handleChangeMode = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
+  const handleChangeMode = (value: string) => {
     setMode(value);
 
     if (value === "text") {
@@ -47,6 +46,7 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
           onChange={handleChangeMode}
         />
         <Button
+          disabled={!!error}
           onClick={() => {
             onBodyChange(text);
           }}
