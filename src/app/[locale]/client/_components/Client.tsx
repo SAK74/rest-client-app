@@ -59,20 +59,22 @@ export default function ClientPage() {
     router.replace(`?${query}`, { scroll: false });
   };
 
-  //eslint-disable-next-line
-  const [response, setResponse] = useState<Promise<Response> | undefined>();
+  const [response, setResponse] = useState<Response | undefined>();
 
-  const onGo = () => {
+  const onGo = async () => {
     //
     //
     // TODO: variables insertion
-    // TODO: create route handlers and
-    // const response = fetch(`/api/request?url=${url}`, {
-    //   method,
-    //   headers: _headers,
-    //   body,
-    // });
-    // setResponse(response)
+    const response = await fetch(
+      `/api/request/${url}?${searchParams.toString()}`,
+      {
+        method,
+        ...(method !== "GET" && method !== "HEAD" && { body: bodyDecoded }),
+      },
+    );
+
+    setResponse(response);
+    // TODO: save to history !
   };
 
   return (
@@ -89,7 +91,9 @@ export default function ClientPage() {
               <InputUrl
                 {...{ method, onMethodChange, onUrlChange, url: urlDecoded }}
               ></InputUrl>
-              <Button onClick={onGo}>Go!</Button>
+              <Button onClick={onGo} disabled={!url}>
+                Go!
+              </Button>
             </div>
             <Tabs defaultValue={"headers"}>
               <TabsList>
