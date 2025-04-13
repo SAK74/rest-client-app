@@ -1,39 +1,51 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useTheme } from "next-themes";
 import { Select } from "@/components";
 import { Button } from "@/components/ui/button";
 
-const selectOptions = ["JSON", "text"];
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+});
+
+const selectOptions = ["json", "text"];
 
 const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
   body,
   onBodyChange,
 }) => {
+  const { theme } = useTheme();
+
   const [text, setText] = useState<string>(() => body || "");
-  const [error, setError] = useState<string | null>(null);
-  const [mode, setMode] = useState("JSON");
+  const [isError, setIsError] = useState<boolean>(false);
+  const [mode, setMode] = useState("json");
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    setText(value);
+  useEffect(() => {
+    validateBody(body, mode);
+  }, [body, mode]);
 
-    if (mode === "JSON") {
+  const validateBody = (value: string | undefined, modeValue: string) => {
+    if (modeValue === "json") {
       try {
-        JSON.parse(value);
-        setError(null);
+        JSON.parse(value || "");
+        setIsError(false);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Invalid JSON");
+        console.error("JSON parse error", err);
+        setIsError(true);
       }
     } else {
-      setError(null);
+      setIsError(false);
     }
+  };
+
+  const handleTextChange = (value: string | undefined) => {
+    setText(value || "");
+    validateBody(value, mode);
   };
 
   const handleChangeMode = (value: string) => {
     setMode(value);
-
-    if (value === "text") {
-      setError(null);
-    }
+    validateBody(body, value);
   };
 
   return (
@@ -46,7 +58,7 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
           onChange={handleChangeMode}
         />
         <Button
-          disabled={!!error}
+          disabled={isError}
           onClick={() => {
             onBodyChange(text);
           }}
@@ -55,18 +67,13 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
         </Button>
       </div>
 
-      <textarea
+      <MonacoEditor
+        height="300px"
+        language={mode}
+        theme={theme === "dark" ? "vs-dark" : "light"}
         value={text}
         onChange={handleTextChange}
-        className="w-full h-60 p-2 border rounded font-mono text-sm"
-        spellCheck="false"
       />
-
-      {error && (
-        <div className="mt-2 p-2 bg-red-100 text-red-700 rounded">
-          Error: {error}
-        </div>
-      )}
     </div>
   );
 };
