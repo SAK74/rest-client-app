@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Link } from "@/i18n/navigation";
 
 const STORAGE_KEY = "rest_client_variables";
 
@@ -67,9 +66,6 @@ export default function VariablesClient() {
           ))}
         </ul>
       </div>
-      <Link href="/client">
-        <button>Go to Client</button>
-      </Link>
     </div>
   );
 }

@@ -6,6 +6,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer base {
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
 /* custom vars */
 :root {
   --header-height: 48px;

@@ -19,13 +19,13 @@ const Socials: FC<SocialsProps> = ({ callbackUrl }) => {
   return (
     <div className="text-center space-y-2">
       <p>{t("login_with_provider")}</p>
-      <Button onClick={onGitClick}>
+      <Button onClick={onGitClick} className="space-x-6">
         <Image
           src={"/github.svg"}
           alt="github_logo"
-          width={50}
-          height={50}
-          className="h-full not-dark:invert"
+          width={20}
+          height={20}
+          className="h-5 not-dark:invert"
         />
         <span>Github</span>
       </Button>
