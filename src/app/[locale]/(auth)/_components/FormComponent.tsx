@@ -26,11 +26,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import Socials from "./Socials";
 import { Separator } from "@/components/ui/separator";
-import { toastType } from "@/_setup";
+import { dropTost } from "@/lib/toast";
 
 export type FormProps = {
   formType: "login" | "register";
@@ -63,7 +62,7 @@ const CustomForm: FC<FormProps> = ({ formType }) => {
     const formAction = formType === "login" ? login : register;
     const result = await formAction({ email, password });
     if (result.success) {
-      toast.success(result.message, toastType);
+      dropTost(result.message, "success");
       update();
       router.push(
         formType === "register"
@@ -72,7 +71,7 @@ const CustomForm: FC<FormProps> = ({ formType }) => {
         { scroll: false, locale },
       );
     } else {
-      toast.error(result.message, toastType);
+      dropTost(result.message, "error");
     }
   };
 

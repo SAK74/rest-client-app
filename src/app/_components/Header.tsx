@@ -1,26 +1,41 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useLocale } from "next-intl";
+// import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
 import { signOut } from "next-auth/react";
 import LangSwitcher from "./LangSwitcher";
 import { Button } from "@/components/ui/button";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { dropTost } from "@/lib/toast";
 
 const ThemeChanger = dynamic(() => import("./ThemeChanger"), { ssr: false });
 
 export default function Header() {
   const t = useTranslations("Header");
-  const locale = useLocale();
+  // const locale = useLocale();
   const { status } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
 
-  const onLogout = () => {
-    signOut({ redirectTo: `/${locale}` });
+  const onLogout = async () => {
+    try {
+      await signOut({ redirect: false });
+      // console.log({ res });
+      dropTost("You are logged out", "success");
+      router.replace("/");
+    } catch (err) {
+      let message = "Somethink went wrong...";
+      if (err instanceof Error) {
+        message = err.message;
+      } else if (typeof err === "string") {
+        message = err;
+      }
+      dropTost(message, "error");
+    }
   };
 
   const [isScrolling, setIsscrolling] = useState(false);

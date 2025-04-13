@@ -19,10 +19,11 @@ export async function login({ email, password }: UserCredentials): ReturnType {
     });
     return { success: true, message: "Loggin successfully" };
   } catch (err) {
-    console.log("Error logging");
-    console.log({ err });
-    // TODO: handle errors
-    return { success: false, message: "Loggin error" };
+    let message = "Loggin error";
+    if (err instanceof Error) {
+      message = err.message.split("..")[0];
+    }
+    return { success: false, message };
   }
 }
 
@@ -39,7 +40,10 @@ export async function register({
       message: `User with email ${createdMail} has been created`,
     };
   } catch (err) {
-    console.log("Error register: ", err);
-    return { success: false, message: "Error in user create" };
+    let message = "Register error";
+    if (err instanceof Error) {
+      message = err.message;
+    }
+    return { success: false, message };
   }
 }
