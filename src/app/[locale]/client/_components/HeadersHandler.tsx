@@ -1,11 +1,9 @@
-"use client";
-import { useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Table } from "@/components/ui/table";
-import { Modal } from "@/components/ui/modal";
+import { Table, Modal } from "@/components";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -27,7 +25,7 @@ import {
 import { RestClientHeader, restClientHeaderSchema } from "@/schemas";
 
 interface DataItem {
-  id: string | number | null;
+  id: string | number;
   key: string;
   value: string;
 }
@@ -42,28 +40,20 @@ const defaultValues = {
   value: "",
 };
 
-export default function Headers() {
-  const router = useRouter();
+const Headers: FC<{
+  query: Record<string, string>;
+  onQueryChange: (query: string) => void;
+}> = ({ query, onQueryChange }) => {
   const searchParams = useSearchParams();
 
   const [isOpen, setIsOpen] = useState(false);
   const [updatedItem, setUpdatedItem] = useState<DataItem | null>(null);
-  const [data, setData] = useState<DataItem[]>([]);
 
-  useEffect(() => {
-    const paramsArray: DataItem[] = [];
-    let id = 1;
-
-    searchParams.forEach((value, key) => {
-      paramsArray.push({
-        id: id++,
-        key,
-        value,
-      });
-    });
-
-    setData(paramsArray);
-  }, [searchParams]);
+  const data: DataItem[] = Object.entries(query).map(([key, value], id) => ({
+    key,
+    value,
+    id,
+  }));
 
   const form = useForm({
     resolver: zodResolver(restClientHeaderSchema),
@@ -79,7 +69,7 @@ export default function Headers() {
   const addParam = ({ key, value }: RestClientHeader) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set(key, value);
-    router.push(`?${params.toString()}`);
+    onQueryChange(params.toString());
   };
 
   const removeHeader = async (value: DataItem) => {
@@ -89,7 +79,7 @@ export default function Headers() {
   const removeParam = (paramName: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete(paramName);
-    router.replace(`?${params.toString()}`);
+    onQueryChange(params.toString());
   };
 
   const updateHeader = async ({ key, value }: RestClientHeader) => {
@@ -190,4 +180,6 @@ export default function Headers() {
       </Modal>
     </div>
   );
-}
+};
+
+export default Headers;

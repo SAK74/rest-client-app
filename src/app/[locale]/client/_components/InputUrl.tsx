@@ -1,74 +1,35 @@
-"use client";
-import { useState } from "react";
-import { useRouter, usePathname, useParams } from "next/navigation";
-import Select from "@/components/ui/select";
+import type { FC, FormEventHandler } from "react";
+import { Select } from "@/components";
 import { Methods } from "@/app/_constants/methods";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // import { replaceVariables } from "@/lib/replaceVariables";
 
-const SelectOptions = Methods.map((item) => ({ label: item, value: item }));
-
-/*
-export async function sendRequest(url: string, method: string, body: string, headers: Record<string, string>) {
-  const finalUrl = replaceVariables(url);
-  const finalBody = replaceVariables(body);
-
-  const finalHeaders: Record<string, string> = {};
-  for (const [key, value] of Object.entries(headers)) {
-    finalHeaders[key] = replaceVariables(value);
-  }
-
-  console.log("Final URL:", finalUrl);
-  console.log("Final Headers:", finalHeaders);
-  console.log("Final Body:", finalBody);
-
-  try {
-    const response = await fetch(finalUrl, {
-      method,
-      headers: finalHeaders,
-      body: method !== "GET" && method !== "HEAD" ? finalBody : undefined,
-    });
-
-    const result = await response.json();
-    console.log("Response:", result);
-    return result;
-  } catch (error) {
-    console.error("Fetch error:", error);
-  }
-}
-*/
-
-export default function InputUrl() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const params = useParams();
-
-  const methodValue = params.slug?.[0];
-
-  const [method, setMethod] = useState<string | undefined>(methodValue);
-
-  const [url, setUrl] = useState<string>("");
-
-  const handleMethodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-    setMethod(value);
-    if (methodValue) {
-      router.push(`${pathname.replace(methodValue, value)}`, { scroll: false });
-    } else {
-      router.push(`${pathname}/${value}`, { scroll: false });
-    }
+const InputUrl: FC<{
+  method: string;
+  onMethodChange: (method: string) => void;
+  url: string;
+  onUrlChange: (url: string) => void;
+}> = ({ method, onMethodChange, url, onUrlChange }) => {
+  const handleMethodChange = (value: string) => {
+    onMethodChange(value);
   };
 
-  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUrl(event.target.value);
+  const onSubmit: FormEventHandler<HTMLFormElement> = (ev) => {
+    ev.preventDefault();
+    const value = (
+      ev.currentTarget.elements.namedItem("url") as HTMLInputElement
+    ).value;
+    onUrlChange(value);
   };
 
   return (
-    <div className="grid grid-cols-[auto_620px_auto] gap-4 items-end">
+    <form
+      className="grid grid-cols-[auto_620px_auto] gap-4 items-end"
+      onSubmit={onSubmit}
+    >
       <Select
         label="Method"
-        options={SelectOptions}
+        options={Methods.map((value) => ({ label: value, value }))}
         onChange={handleMethodChange}
         value={method}
       />
@@ -76,12 +37,14 @@ export default function InputUrl() {
         <label htmlFor="url">Endpoint URL</label>
         <Input
           id="url"
+          name="url"
           placeholder="Type URL here..."
-          value={url}
-          onChange={handleUrlChange}
+          defaultValue={url}
+          spellCheck="false"
         />
       </div>
-      <Button>Send</Button>
-    </div>
+    </form>
   );
-}
+};
+
+export default InputUrl;
