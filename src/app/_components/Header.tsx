@@ -1,7 +1,6 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-// import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
 import { signOut } from "next-auth/react";
 import LangSwitcher from "./LangSwitcher";
@@ -11,12 +10,12 @@ import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { dropTost } from "@/lib/toast";
+import Image from "next/image";
 
 const ThemeChanger = dynamic(() => import("./ThemeChanger"), { ssr: false });
 
 export default function Header() {
   const t = useTranslations("Header");
-  // const locale = useLocale();
   const { status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
@@ -24,7 +23,6 @@ export default function Header() {
   const onLogout = async () => {
     try {
       await signOut({ redirect: false });
-      // console.log({ res });
       dropTost("You are logged out", "success");
       router.replace("/");
     } catch (err) {
@@ -57,13 +55,23 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "flex justify-center items-center px-4 py-2 sticky top-0 h-(--header-height) z-10 bg-slate-400 dark:bg-slate-800",
+        "w-full flex justify-center items-center px-4 py-2 sticky top-0 h-(--header-height) z-10 bg-slate-400 dark:bg-slate-800",
         {
           "bg-transparent backdrop-blur-md dark:bg-transparent dark:backdrop-blur-md":
             isScrolling,
         },
       )}
     >
+      <Link href={"/"}>
+        <Image
+          src={"/rest_logo.png"}
+          alt="project_logo"
+          width={56}
+          height={40}
+          className="dark:invert-75 h-10"
+        />
+      </Link>
+
       <h3 className="grow text-center">{t("tittle")}</h3>
       <span className="flex gap-4 items-center">
         {status === "authenticated" ? (
