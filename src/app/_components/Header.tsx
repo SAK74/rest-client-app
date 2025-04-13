@@ -54,9 +54,9 @@ export default function Header() {
         <Image
           src={"/rest_logo.png"}
           alt="project_logo"
-          width={60}
-          height={32}
-          className="dark:invert-75"
+          width={56}
+          height={40}
+          className="dark:invert-75 h-10"
         />
       </Link>
 

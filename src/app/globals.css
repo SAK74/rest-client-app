@@ -9,7 +9,7 @@
 /* custom vars */
 :root {
   --header-height: 48px;
-  --footer-height: 36px;
+  --footer-height: 40px;
 }
 @theme {
   /* TODO: to define maybe */
