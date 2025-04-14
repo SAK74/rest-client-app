@@ -61,9 +61,16 @@ export default function ClientPage() {
 
   const [response, setResponse] = useState<Response | undefined>();
 
+  type ResponseData =
+    | string
+    | number
+    | boolean
+    | Record<string, unknown>
+    | Array<unknown>
+    | null;
+  const [responseData, setResponseData] = useState<ResponseData>(null);
+
   const onGo = async () => {
-    //
-    //
     // TODO: variables insertion
     const response = await fetch(
       `/api/request/${url}?${searchParams.toString()}`,
@@ -73,7 +80,19 @@ export default function ClientPage() {
       },
     );
 
+    const { status, statusText } = response;
+    const contentType = response.headers.get("content-type") || "";
+    let data;
+
+    if (contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      data = await response.text();
+    }
+
     setResponse(response);
+    setResponseData({ status, statusText, body: data });
+
     // TODO: save to history !
   };
 
@@ -125,7 +144,7 @@ export default function ClientPage() {
         <Card className="mx-6 w-4xl">
           <CardHeader>
             <CardTitle className="flex flex-col items-center">
-              <ResponseView response={response} />
+              <ResponseView response={response} data={responseData} />
             </CardTitle>
           </CardHeader>
           <CardContent></CardContent>
@@ -133,7 +152,7 @@ export default function ClientPage() {
       </section>
 
       <Link href="/variables" className="mt-8 p-4">
-        <button>Go to Variables</button>
+        <button>Go to Variables!!!</button>
       </Link>
     </main>
   );

@@ -1,28 +1,52 @@
-import { type FC } from "react";
+import React from "react";
 
-const ResponseView: FC<{ response?: Response }> = ({ response }) => {
-  // .....
-  return (
-    <div>
-      {/* use json-viewer or similar */}
-      Response view
-      {response && (
-        <div>
-          <p>Response status: {response?.status}</p>
-          <p>{response.statusText}</p>
-          <p>Headers:</p>
-          <ul>
-            {Array.from(response.headers.entries()).map(([key, value]) => (
-              <li key={key}>
-                <strong>{key}: </strong>
-                {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
+type Props = {
+  response?: Response;
+  data?:
+    | string
+    | number
+    | boolean
+    | Record<string, unknown>
+    | Array<unknown>
+    | null;
 };
 
-export default ResponseView;
+export default function ResponseView({ response, data }: Props) {
+  if (!response) {
+    return <p>No response yet</p>;
+  }
+
+  const renderBody = () => {
+    if (data === null || data === undefined) return <em>No body</em>;
+    if (typeof data === "string") return <pre>{data}</pre>;
+
+    return (
+      <pre
+        style={{
+          background: "#f4f4f4",
+          padding: "1rem",
+          borderRadius: "6px",
+          fontSize: "14px",
+          fontFamily: "monospace",
+          whiteSpace: "pre-wrap",
+          overflowX: "auto",
+          maxHeight: "300px",
+        }}
+      >
+        {JSON.stringify(data, null, 2)}
+      </pre>
+    );
+  };
+
+  return (
+    <div className="w-full text-left space-y-4">
+      <div className="text-sm">
+        <strong>Status:</strong> {response.status} {response.statusText}
+      </div>
+      <div>
+        <strong>Body:</strong>
+        <div className="mt-2">{renderBody()}</div>
+      </div>
+    </div>
+  );
+}
