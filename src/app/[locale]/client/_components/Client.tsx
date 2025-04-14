@@ -11,7 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ResponseView from "./ResponseView";
 import { Button } from "@/components/ui/button";
 import { useParams, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { startTransition, useState } from "react";
+import { dropTost } from "@/lib/toast";
 
 export default function ClientPage() {
   const t = useTranslations("Client_Page");
@@ -63,18 +64,34 @@ export default function ClientPage() {
 
   const onGo = async () => {
     //
-    //
     // TODO: variables insertion
-    const response = await fetch(
-      `/api/request/${url}?${searchParams.toString()}`,
-      {
-        method,
-        ...(method !== "GET" && method !== "HEAD" && { body: bodyDecoded }),
-      },
-    );
-
-    setResponse(response);
-    // TODO: save to history !
+    startTransition(() => {
+      setResponse(undefined);
+    });
+    try {
+      const response = await fetch(
+        `/api/request/${url}?${searchParams.toString()}`,
+        {
+          method,
+          ...(method !== "GET" && method !== "HEAD" && { body: bodyDecoded }),
+        },
+      );
+      if (response.headers.has("x-app-error")) {
+        dropTost(
+          response.headers.get("x-app-error") || "Request error",
+          "error",
+          "look at server console",
+        );
+      } else {
+        startTransition(() => {
+          setResponse(response);
+          // TODO: save to history !
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      dropTost("Internal app error", "error");
+    }
   };
 
   return (
