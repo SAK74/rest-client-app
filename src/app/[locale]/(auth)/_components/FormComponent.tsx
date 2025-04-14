@@ -50,6 +50,7 @@ const CustomForm: FC<FormProps> = ({ formType }) => {
     ),
     mode: "all",
     defaultValues: {
+      name: "",
       email: "",
       password: "",
       password_confirm: "",
@@ -58,9 +59,9 @@ const CustomForm: FC<FormProps> = ({ formType }) => {
   const { update } = useSession();
   const onValid: SubmitHandler<
     UserCredentials & { password_confirm?: string }
-  > = async ({ email, password }) => {
+  > = async ({ email, password, name }) => {
     const formAction = formType === "login" ? login : register;
-    const result = await formAction({ email, password });
+    const result = await formAction({ email, password, name });
     if (result.success) {
       dropTost(result.message, "success");
       update();
@@ -85,6 +86,19 @@ const CustomForm: FC<FormProps> = ({ formType }) => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onValid)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name: </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Your name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"

@@ -5,6 +5,7 @@ import { intlMiddleware } from "./i18n/routing";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "./firebase";
 import { FirebaseError } from "firebase/app";
+import { UserCredentials } from "./schemas";
 
 export const authConfig = {
   pages: { signIn: "/login" },
@@ -23,10 +24,7 @@ export const authConfig = {
         },
       },
       authorize: async (credentials) => {
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
+        const { email, password, name } = credentials as UserCredentials;
         if (email && password) {
           try {
             const firebase = await signInWithEmailAndPassword(
@@ -34,7 +32,7 @@ export const authConfig = {
               email,
               password,
             );
-            return firebase.user;
+            return { ...firebase.user, name };
           } catch (err) {
             let message = "Firebase error";
             if (err instanceof FirebaseError) {

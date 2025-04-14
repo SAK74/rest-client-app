@@ -1,10 +1,21 @@
 {
   "Header": {
     "tittle": "Witamy w rest-cliencie!",
-    "login_register": "Logowanie/rejestracja"
+    "login_register": "Logowanie/rejestracja",
+    "client": "Klient",
+    "history": "Historia",
+    "variables": "Zmienne",
+    "logout": "Wyloguj"
   },
   "Welcome_Page": {
-    "tittle": "Witamy, proszę się zalogować..."
+    "welcome": "Witaj",
+    "navi": "Gdzie zmierzasz?",
+    "client": "Klient",
+    "history": "Historia",
+    "variables": "Zmienne",
+    "must_log_in": "Musisz się zalogować by móc coś zobaczyć",
+    "login": "Logowanie",
+    "signup": "Rejestracja"
   },
   "Client_Page": {
     "Method": "Metoda",

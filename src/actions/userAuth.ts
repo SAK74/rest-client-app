@@ -10,14 +10,19 @@ type ReturnType = Promise<{
   message: string;
 }>;
 
-export async function login({ email, password }: UserCredentials): ReturnType {
+export async function login({
+  email,
+  password,
+  name,
+}: UserCredentials): ReturnType {
   try {
     await signIn("credentials", {
       email,
       password,
+      name,
       redirect: false,
     });
-    return { success: true, message: "Loggin successfully" };
+    return { success: true, message: "You are logged in successfully" };
   } catch (err) {
     let message = "Loggin error";
     if (err instanceof Error) {

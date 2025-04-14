@@ -1,10 +1,21 @@
 {
   "Header": {
     "tittle": "Welcome in rest-client!",
-    "login_register": "Log in/Sign up"
+    "login_register": "Log in/Sign up",
+    "client": "Client",
+    "history": "History",
+    "variables": "Variables",
+    "logout": "Logout"
   },
   "Welcome_Page": {
-    "tittle": "Welcome, plz login... bla-bla"
+    "welcome": "Welcome",
+    "navi": "What would you like to do?",
+    "client": "Client",
+    "history": "History",
+    "variables": "Variables",
+    "must_log_in": "You must logged in to view something",
+    "login": "Log in",
+    "signup": "Sign up"
   },
   "Client_Page": {
     "Method": "Method",

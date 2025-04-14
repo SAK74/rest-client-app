@@ -18,6 +18,7 @@ const passwordSchema = z
   .and(withSpecialChar);
 
 export const credentialsSchema = z.object({
+  name: z.string().min(1, "We should know what to call you.."),
   email: z.string().min(1, "Email is required").email(),
   password: passwordSchema,
 });
