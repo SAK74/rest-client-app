@@ -30,5 +30,10 @@
     "register_link": "Have account? Login!",
     "submit_btn": "Submit",
     "login_with_provider": "Or log in with"
+  },
+  "History_Page": {
+    "history_page": "History",
+    "no_requests_title": "You haven't executed any requests",
+    "no_requests_description": "It's empty here. Try:"
   }
 }

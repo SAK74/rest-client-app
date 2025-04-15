@@ -30,5 +30,10 @@
     "register_link": "Masz konto? Zaloguj się!",
     "submit_btn": "Zatwierdź",
     "login_with_provider": "Albo załoguj się przez"
+  },
+  "History_Page": {
+    "history_page": "Historia",
+    "no_requests_title": "Nie wykonałeś żadnych żądań",
+    "no_requests_description": "Tutaj jest pusto. Spróbuj:"
   }
 }
