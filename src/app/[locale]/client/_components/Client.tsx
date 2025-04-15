@@ -61,15 +61,6 @@ export default function ClientPage() {
 
   const [response, setResponse] = useState<Response | undefined>();
 
-  type ResponseData =
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | Array<unknown>
-    | null;
-  const [responseData, setResponseData] = useState<ResponseData>(null);
-
   const onGo = async () => {
     // TODO: variables insertion
     const response = await fetch(
@@ -80,18 +71,7 @@ export default function ClientPage() {
       },
     );
 
-    const { status, statusText } = response;
-    const contentType = response.headers.get("content-type") || "";
-    let data;
-
-    if (contentType.includes("application/json")) {
-      data = await response.json();
-    } else {
-      data = await response.text();
-    }
-
     setResponse(response);
-    setResponseData({ status, statusText, body: data });
 
     // TODO: save to history !
   };
@@ -144,7 +124,7 @@ export default function ClientPage() {
         <Card className="mx-6 w-4xl">
           <CardHeader>
             <CardTitle className="flex flex-col items-center">
-              <ResponseView response={response} data={responseData} />
+              <ResponseView response={response} />
             </CardTitle>
           </CardHeader>
           <CardContent></CardContent>

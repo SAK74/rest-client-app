@@ -1,51 +1,49 @@
-import React from "react";
+"use client";
+
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const Monaco = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
 type Props = {
   response?: Response;
-  data?:
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | Array<unknown>
-    | null;
 };
 
-export default function ResponseView({ response, data }: Props) {
-  if (!response) {
-    return <p>No response yet</p>;
-  }
+export default function ResponseView({ response }: Props) {
+  const [body, setBody] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
-  const renderBody = () => {
-    if (data === null || data === undefined) return <em>No body</em>;
-    if (typeof data === "string") return <pre>{data}</pre>;
+  useEffect(() => {
+    if (!response) return;
 
-    return (
-      <pre
-        style={{
-          background: "#f4f4f4",
-          padding: "1rem",
-          borderRadius: "6px",
-          fontSize: "14px",
-          fontFamily: "monospace",
-          whiteSpace: "pre-wrap",
-          overflowX: "auto",
-          maxHeight: "300px",
-        }}
-      >
-        {JSON.stringify(data, null, 2)}
-      </pre>
-    );
-  };
+    const cloned = response.clone();
+    setStatus(`${cloned.status} ${cloned.statusText}`);
+
+    cloned
+      .text()
+      .then(setBody)
+      .catch(() => setBody("Could not read body"));
+  }, [response]);
 
   return (
     <div className="w-full text-left space-y-4">
       <div className="text-sm">
-        <strong>Status:</strong> {response.status} {response.statusText}
+        <strong>Status:</strong> {status}
       </div>
       <div>
         <strong>Body:</strong>
-        <div className="mt-2">{renderBody()}</div>
+        <div className="mt-2">
+          <Monaco
+            language="json"
+            value={body}
+            options={{
+              readOnly: true,
+              minimap: { enabled: false },
+              fontSize: 14,
+            }}
+            height="300px"
+          />
+        </div>
       </div>
     </div>
   );
