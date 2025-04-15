@@ -62,8 +62,6 @@ export default function ClientPage() {
   const [response, setResponse] = useState<Response | undefined>();
 
   const onGo = async () => {
-    //
-    //
     // TODO: variables insertion
     const response = await fetch(
       `/api/request/${url}?${searchParams.toString()}`,
@@ -74,6 +72,7 @@ export default function ClientPage() {
     );
 
     setResponse(response);
+
     // TODO: save to history !
   };
 
@@ -133,7 +132,7 @@ export default function ClientPage() {
       </section>
 
       <Link href="/variables" className="mt-8 p-4">
-        <button>Go to Variables</button>
+        <button>Go to Variables!!!</button>
       </Link>
     </main>
   );
