@@ -1,13 +1,30 @@
+"use client";
+
 import { useState, useEffect } from "react";
 
 export function useLocalStorage(
-  storageKey = "searchValue",
-): [string, (data: string) => void] {
-  const [value, setValue] = useState(localStorage.getItem(storageKey) || "");
+  key: string,
+): [string, (value: string) => void] {
+  const [storedValue, setStoredValue] = useState<string>("");
 
   useEffect(() => {
-    localStorage.setItem(storageKey, value);
-  }, [value, storageKey]);
+    try {
+      const item = window.localStorage.getItem(key);
+      setStoredValue(item || "");
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+      setStoredValue("");
+    }
+  }, [key]);
 
-  return [value, setValue];
+  const setValue = (value: string) => {
+    try {
+      setStoredValue(value);
+      window.localStorage.setItem(key, value);
+    } catch (error) {
+      console.error("Error setting localStorage:", error);
+    }
+  };
+
+  return [storedValue, setValue];
 }
