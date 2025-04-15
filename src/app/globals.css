@@ -6,7 +6,7 @@
 @layer base {
   a:not(:is(button a)):hover {
     text-decoration: underline;
-  }
+  } */
 }
 
 /* custom vars */

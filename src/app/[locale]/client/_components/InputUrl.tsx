@@ -19,7 +19,7 @@ const InputUrl: FC<{
     const value = (
       ev.currentTarget.elements.namedItem("url") as HTMLInputElement
     ).value;
-    onUrlChange(value);
+    onUrlChange(value.trim());
   };
 
   return (
