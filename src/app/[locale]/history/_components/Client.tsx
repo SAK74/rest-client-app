@@ -5,9 +5,10 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import NoRequests from "./NoRequests";
 import { Button } from "@/components/ui/button";
 import { getFullClientLink } from "@/lib/getFullClientLink";
+import NoRequests from "./NoRequests";
+import Loader from "@/app/_components/Loader";
 
 export interface HistoryItem {
   method: string;
@@ -20,12 +21,15 @@ export interface HistoryItem {
 export default function ClientPage() {
   const t = useTranslations("History_Page");
 
-  const [history] = useLocalStorage("history");
+  const [history, , isLoadingHistory] = useLocalStorage("history");
 
   const [sortedHistory, setSortedHistory] = useState<HistoryItem[]>();
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   useEffect(() => {
     if (!!history.length) {
+      setIsProcessing(true);
+
       try {
         const value: [] = JSON.parse(history);
         const sortedValue = value.sort(
@@ -34,9 +38,28 @@ export default function ClientPage() {
         setSortedHistory(sortedValue);
       } catch (error) {
         console.error("Not able to parse history JSON", error);
+      } finally {
+        setIsProcessing(false);
       }
     }
   }, [history]);
+
+  const isLoading = isLoadingHistory || isProcessing;
+
+  if (isLoading) {
+    return (
+      <main className="flex flex-col gap-8 py-4 items-center">
+        <Card className="mx-6 w-4xl">
+          <CardHeader>
+            <CardTitle className="flex flex-col items-center">
+              {t("history_page")}
+            </CardTitle>
+          </CardHeader>
+          <Loader />
+        </Card>
+      </main>
+    );
+  }
 
   return (
     <main className="flex flex-col gap-8 py-4 items-center">
