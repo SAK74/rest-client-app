@@ -7,7 +7,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
-  a:hover {
+  a:not(:is(button a)):hover {
     text-decoration: underline;
   }
 }
