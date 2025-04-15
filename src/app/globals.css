@@ -7,9 +7,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
-  a:hover {
+  /* a:hover {
     text-decoration: underline;
-  }
+  } */
 }
 
 /* custom vars */

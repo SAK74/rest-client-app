@@ -33,6 +33,9 @@ export default function ClientPage() {
   };
   const urlDecoded = url && atob(decodeURIComponent(url));
   const onUrlChange = (url: string) => {
+    if (!url) {
+      return;
+    }
     pathnameArr[3] = btoa(url);
     router.replace(
       {
@@ -106,7 +109,12 @@ export default function ClientPage() {
           <CardContent className="flex flex-col gap-8">
             <div className="flex items-end justify-between">
               <InputUrl
-                {...{ method, onMethodChange, onUrlChange, url: urlDecoded }}
+                {...{
+                  method,
+                  onMethodChange,
+                  onUrlChange,
+                  url: urlDecoded.trim(),
+                }}
               ></InputUrl>
               <Button onClick={onGo} disabled={!url}>
                 Go!
