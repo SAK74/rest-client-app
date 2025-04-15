@@ -7,8 +7,8 @@ import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getFullClientLink } from "@/lib/getFullClientLink";
-import NoRequests from "./NoRequests";
 import Loader from "@/app/_components/Loader";
+import NoRequests from "./NoRequests";
 
 export interface HistoryItem {
   method: string;
