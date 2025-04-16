@@ -71,7 +71,7 @@ export default function ClientPage() {
         </CardHeader>
         <CardContent>
           {!sortedHistory?.length ? (
-            <NoRequests t={t} />
+            <NoRequests />
           ) : (
             <div className="flex flex-col">
               {sortedHistory.map((item) => (

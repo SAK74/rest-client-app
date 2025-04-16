@@ -1,12 +1,11 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-interface NoRequestsProps {
-  t: (data: string) => string;
-}
+export default function NoRequests() {
+  const t = useTranslations("History_Page");
 
-export default function NoRequests({ t }: NoRequestsProps) {
   return (
     <Card className="px-8">
       <CardTitle>{t("no_requests_title")}</CardTitle>
