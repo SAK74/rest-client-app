@@ -40,6 +40,8 @@ const defaultValues = {
   value: "",
 };
 
+const disabledHeaders = ["Content-Type"];
+
 const Headers: FC<{
   query: Record<string, string>;
   onQueryChange: (query: string) => void;
@@ -113,13 +115,15 @@ const Headers: FC<{
                   setUpdatedItem(row);
                   setIsOpen(true);
                 }}
-                className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3"
+                className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3 disabled:text-gray-400"
+                disabled={disabledHeaders.includes(row.key)}
               >
                 Edit
               </button>
               <button
                 onClick={() => removeHeader(row)}
-                className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:text-gray-400"
+                disabled={disabledHeaders.includes(row.key)}
               >
                 Delete
               </button>
