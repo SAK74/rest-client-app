@@ -10,7 +10,7 @@
 | - text input for the endpoint URL    | Nastya   | 👁‍🗨 /on process/          |
 | - headers editor                     | Nastya   |
 | - body editor                        | Nastya   |
-| - response section                   | Vlad     |
+| - response section                   | Vlad     | 👁‍🗨 /on process/          |
 | - generated code section             | Sergij   | 👁‍🗨                       |
 | - route handlers                     | Sergij   | ✔                       |
 | 5. Variables page                    | Vlad     | ✔                       |
