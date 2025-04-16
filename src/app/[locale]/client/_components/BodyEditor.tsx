@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Select } from "@/components";
 import { Button } from "@/components/ui/button";
@@ -10,10 +11,13 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
 
 const selectOptions = ["json", "text"];
 
-const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
-  body,
-  onBodyChange,
-}) => {
+const Body: FC<{
+  body?: string;
+  onBodyChange: (body: string, params: URLSearchParams) => void;
+  query: Record<string, string>;
+}> = ({ body, onBodyChange, query }) => {
+  const searchParams = useSearchParams();
+
   const { theme } = useTheme();
 
   const [text, setText] = useState<string>(() => body || "");
@@ -21,16 +25,24 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
   const [mode, setMode] = useState("json");
 
   useEffect(() => {
+    const contentType = query["Content-Type"];
+
+    if (contentType === "text/plain; charset=utf-8") {
+      setMode("text");
+    }
+  }, [query]);
+
+  useEffect(() => {
     validateBody(body, mode);
   }, [body, mode]);
 
   const validateBody = (value: string | undefined, modeValue: string) => {
-    if (modeValue === "json") {
+    if (modeValue === "json" && value) {
       try {
         JSON.parse(value || "");
         setIsError(false);
       } catch (err) {
-        console.error("JSON parse error", err);
+        console.warn("JSON parse error", err);
         setIsError(true);
       }
     } else {
@@ -60,7 +72,18 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
         <Button
           disabled={isError}
           onClick={() => {
-            onBodyChange(text);
+            const params = new URLSearchParams(searchParams.toString());
+            if (!!text.length) {
+              if (mode === "json") {
+                params.set("Content-Type", "application/json");
+              } else {
+                params.set("Content-Type", "text/plain; charset=utf-8");
+              }
+            } else {
+              params.delete("Content-Type");
+            }
+
+            onBodyChange(text, params);
           }}
         >
           Ok
