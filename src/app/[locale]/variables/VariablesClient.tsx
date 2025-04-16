@@ -1,5 +1,6 @@
 "use client";
 
+import { getVariables } from "@/lib/getVariables";
 import React, { useState, useEffect } from "react";
 
 const STORAGE_KEY = "rest_client_variables";
@@ -7,19 +8,11 @@ const STORAGE_KEY = "rest_client_variables";
 type VarsRecord = Record<string, string>;
 
 export default function VariablesClient() {
-  const [variables, setVariables] = useState<VarsRecord>({});
+  const [variables, setVariables] = useState<VarsRecord>(
+    () => getVariables() || {},
+  );
   const [newKey, setNewKey] = useState("");
   const [newValue, setNewValue] = useState("");
-
-  useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw);
-        setVariables(parsed);
-      } catch {}
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(variables));

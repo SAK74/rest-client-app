@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form";
 
 import { RestClientHeader, restClientHeaderSchema } from "@/schemas";
+import { decodeVars, encodeVars } from "@/lib/replaceVariables";
 
 interface DataItem {
   id: string | number;
@@ -51,11 +52,16 @@ const Headers: FC<{
   const [isOpen, setIsOpen] = useState(false);
   const [updatedItem, setUpdatedItem] = useState<DataItem | null>(null);
 
-  const data: DataItem[] = Object.entries(query).map(([key, value], id) => ({
-    key,
-    value,
-    id,
-  }));
+  const [data, setData] = useState<DataItem[]>([]);
+  useEffect(() => {
+    setData(
+      Object.entries(query).map(([key, value], id) => ({
+        key,
+        value: encodeVars(value),
+        id,
+      })),
+    );
+  }, [query]);
 
   const form = useForm({
     resolver: zodResolver(restClientHeaderSchema),
@@ -70,7 +76,7 @@ const Headers: FC<{
 
   const addParam = ({ key, value }: RestClientHeader) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set(key, value);
+    params.set(key, decodeVars(value));
     onQueryChange(params.toString());
   };
 

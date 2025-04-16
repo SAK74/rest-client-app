@@ -15,6 +15,7 @@ import Body from "./BodyEditor";
 import ResponseView from "./ResponseView";
 import { startTransition, useState } from "react";
 import { dropTost } from "@/lib/toast";
+import { decodeVars, encodeVars } from "@/lib/replaceVariables";
 
 export default function ClientPage() {
   const t = useTranslations("Client_Page");
@@ -24,6 +25,11 @@ export default function ClientPage() {
   const pathnameArr = pathname.split("/");
   const searchParams = useSearchParams();
   const query = Object.fromEntries(searchParams.entries());
+
+  const queryEncodedByVars: typeof query = {};
+  for (const key in query) {
+    queryEncodedByVars[key] = encodeVars(query[key]);
+  }
 
   const [method, url, body] = params.request;
 
@@ -36,11 +42,12 @@ export default function ClientPage() {
     );
   };
   const urlDecoded = url && atob(decodeURIComponent(url));
+
   const onUrlChange = (url: string) => {
     if (!url) {
       return;
     }
-    pathnameArr[3] = btoa(url);
+    pathnameArr[3] = btoa(decodeVars(url));
     router.replace(
       {
         pathname: pathnameArr.join("/"),
@@ -54,7 +61,7 @@ export default function ClientPage() {
 
   const onBodyChange = (text: string, searchParams: URLSearchParams) => {
     const query = Object.fromEntries(searchParams.entries());
-    pathnameArr[4] = btoa(text);
+    pathnameArr[4] = btoa(decodeVars(text));
     router.replace(
       {
         pathname: pathnameArr.join("/"),
@@ -124,7 +131,7 @@ export default function ClientPage() {
                   method,
                   onMethodChange,
                   onUrlChange,
-                  url: urlDecoded.trim(),
+                  url: encodeVars(urlDecoded.trim()),
                 }}
               ></InputUrl>
               <Button onClick={onGo} disabled={!url}>
@@ -142,9 +149,9 @@ export default function ClientPage() {
               </TabsContent>
               <TabsContent value="body">
                 <Body
-                  body={bodyDecoded}
-                  onBodyChange={onBodyChange}
                   query={query}
+                  body={encodeVars(bodyDecoded)}
+                  onBodyChange={onBodyChange}
                 />
               </TabsContent>
               <TabsContent value="code">

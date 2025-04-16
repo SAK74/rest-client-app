@@ -6,11 +6,11 @@
 | 2. Internationalization(Intl) / Auth | Sergij   | ✔                       |
 | 3. Main Page                         | Sergij   | ✔                       |
 | 4. Client Page                       |          |                          |
-| - method selector                    | Nastya   | ✔                       |
-| - text input for the endpoint URL    | Nastya   | ✔                       |
-| - headers editor                     | Nastya   | ✔                       |
-| - body editor                        | Nastya   | ✔                       |
-| - response section                   | Vlad     |
+| - method selector                    | Nastya   | 👁‍🗨 /on process/          |
+| - text input for the endpoint URL    | Nastya   | 👁‍🗨 /on process/          |
+| - headers editor                     | Nastya   |
+| - body editor                        | Nastya   |
+| - response section                   | Vlad     | 👁‍🗨 /on process/          |
 | - generated code section             | Sergij   | 👁‍🗨                       |
 | - route handlers                     | Sergij   | ✔                       |
 | 5. Variables page                    | Vlad     | ✔                       |
