@@ -42,8 +42,7 @@ const Body: FC<{
         JSON.parse(value || "");
         setIsError(false);
       } catch (err) {
-        console.warn("JSON parse error", err);
-        setIsError(true);
+        setIsError(!!err);
       }
     } else {
       setIsError(false);
