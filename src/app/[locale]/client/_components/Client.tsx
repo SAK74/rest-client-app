@@ -1,17 +1,19 @@
 "use client";
 
+import { useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+import { prepareHistory } from "@/lib/prepareHistory";
 import Headers from "./HeadersHandler";
 import InputUrl from "./InputUrl";
 import Code from "./CodeView";
 import Body from "./BodyEditor";
-import { useTranslations } from "next-intl";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ResponseView from "./ResponseView";
-import { Button } from "@/components/ui/button";
-import { useParams, useSearchParams } from "next/navigation";
-import { useState } from "react";
 
 export default function ClientPage() {
   const t = useTranslations("Client_Page");
@@ -23,6 +25,8 @@ export default function ClientPage() {
   const query = Object.fromEntries(searchParams.entries());
 
   const [method, url, body] = params.request;
+
+  const [history, setHistory] = useLocalStorage("history");
 
   const onMethodChange = (newMethod: string) => {
     router.replace(
@@ -73,7 +77,15 @@ export default function ClientPage() {
 
     setResponse(response);
 
-    // TODO: save to history !
+    // save to history
+    const newHistory = prepareHistory(history, {
+      headers: query,
+      method: method,
+      url: urlDecoded,
+      body: bodyDecoded,
+    });
+
+    setHistory(newHistory);
   };
 
   return (
