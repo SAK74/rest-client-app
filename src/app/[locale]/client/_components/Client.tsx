@@ -48,7 +48,8 @@ export default function ClientPage() {
 
   const bodyDecoded = body && atob(decodeURIComponent(body));
 
-  const onBodyChange = (text: string) => {
+  const onBodyChange = (text: string, searchParams: URLSearchParams) => {
+    const query = Object.fromEntries(searchParams.entries());
     pathnameArr[4] = btoa(text);
     router.replace(
       {
@@ -116,7 +117,11 @@ export default function ClientPage() {
                 <Headers {...{ query, onQueryChange }} />
               </TabsContent>
               <TabsContent value="body">
-                <Body body={bodyDecoded} onBodyChange={onBodyChange} />
+                <Body
+                  body={bodyDecoded}
+                  onBodyChange={onBodyChange}
+                  query={query}
+                />
               </TabsContent>
               <TabsContent value="code">
                 <Code
