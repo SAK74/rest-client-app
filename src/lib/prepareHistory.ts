@@ -1,4 +1,4 @@
-interface NewHistoryItem {
+export interface HistoryItem {
   method: string;
   url: string;
   body: string;
@@ -7,16 +7,17 @@ interface NewHistoryItem {
 
 export function prepareHistory(
   historyJSON: string,
-  newValues: NewHistoryItem,
+  newValues: HistoryItem,
 ): string {
-  let history;
-  if (!historyJSON.length) {
+  let history: Array<HistoryItem> = [];
+
+  if (!historyJSON) {
     history = [];
   } else {
-    history = JSON.parse(historyJSON);
+    history = JSON.parse(historyJSON) as Array<HistoryItem>;
   }
 
-  history.push({ ...newValues, executionTime: new Date().getTime() });
+  history.push(newValues);
 
   return JSON.stringify(history);
 }

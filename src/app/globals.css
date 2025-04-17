@@ -1,13 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* @import "./_components/header.css"; */
-/* @import "./_components/footer.css"; */
-
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
-  a:hover {
+  a:not(:is(button a)):hover {
     text-decoration: underline;
   }
 }

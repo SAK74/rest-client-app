@@ -1,4 +1,4 @@
-import { HistoryItem } from "@/app/[locale]/history/_components/Client";
+import type { HistoryItem } from "./prepareHistory";
 
 export function getFullClientLink(item: HistoryItem): string {
   let link = `client/${item.method}/${btoa(item.url)}`;

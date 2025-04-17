@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
@@ -9,57 +8,15 @@ import { Button } from "@/components/ui/button";
 import { getFullClientLink } from "@/lib/getFullClientLink";
 import Loader from "@/app/_components/Loader";
 import NoRequests from "./NoRequests";
-
-export interface HistoryItem {
-  method: string;
-  url: string;
-  body: string;
-  headers: { [k: string]: string };
-  executionTime: number;
-}
+import { type HistoryItem } from "@/lib/prepareHistory";
 
 export default function ClientPage() {
   const t = useTranslations("History_Page");
 
   const [history, , isLoadingHistory] = useLocalStorage("history");
-
-  const [sortedHistory, setSortedHistory] = useState<HistoryItem[]>();
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (!!history.length) {
-      setIsProcessing(true);
-
-      try {
-        const value: [] = JSON.parse(history);
-        const sortedValue = value.sort(
-          (a: HistoryItem, b: HistoryItem) => b.executionTime - a.executionTime,
-        );
-        setSortedHistory(sortedValue);
-      } catch (error) {
-        console.error("Not able to parse history JSON", error);
-      } finally {
-        setIsProcessing(false);
-      }
-    }
-  }, [history]);
-
-  const isLoading = isLoadingHistory || isProcessing;
-
-  if (isLoading) {
-    return (
-      <main className="flex flex-col gap-8 py-4 items-center">
-        <Card className="mx-6 w-4xl">
-          <CardHeader>
-            <CardTitle className="flex flex-col items-center">
-              {t("history_page")}
-            </CardTitle>
-          </CardHeader>
-          <Loader />
-        </Card>
-      </main>
-    );
-  }
+  const sortedHistory = history.length
+    ? (JSON.parse(history) as Array<HistoryItem>).reverse()
+    : [];
 
   return (
     <main className="flex flex-col gap-8 py-4 items-center">
@@ -70,17 +27,19 @@ export default function ClientPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {!sortedHistory?.length ? (
+          {isLoadingHistory ? (
+            <Loader />
+          ) : !sortedHistory?.length ? (
             <NoRequests />
           ) : (
-            <div className="flex flex-col">
-              {sortedHistory.map((item) => (
-                <Link key={item.executionTime} href={getFullClientLink(item)}>
-                  <Button variant="link">
-                    {item.method} {item.url}
-                  </Button>
+            <div className="flex flex-col items-start">
+              {sortedHistory.map((item, i) => (
+                <Link key={i} href={getFullClientLink(item)}>
+                  {item.method} {item.url}
                 </Link>
               ))}
+              {/* would be nice to have */}
+              <Button className="self-end">Clear history</Button>
             </div>
           )}
         </CardContent>
