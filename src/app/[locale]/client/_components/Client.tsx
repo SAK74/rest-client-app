@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, startTransition } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
@@ -14,6 +14,7 @@ import InputUrl from "./InputUrl";
 import Code from "./CodeView";
 import Body from "./BodyEditor";
 import ResponseView from "./ResponseView";
+import { dropTost } from "@/lib/toast";
 
 export default function ClientPage() {
   const t = useTranslations("Client_Page");
@@ -36,6 +37,9 @@ export default function ClientPage() {
   };
   const urlDecoded = url && atob(decodeURIComponent(url));
   const onUrlChange = (url: string) => {
+    if (!url) {
+      return;
+    }
     pathnameArr[3] = btoa(url);
     router.replace(
       {
@@ -68,25 +72,41 @@ export default function ClientPage() {
 
   const onGo = async () => {
     // TODO: variables insertion
-    const response = await fetch(
-      `/api/request/${url}?${searchParams.toString()}`,
-      {
-        method,
-        ...(method !== "GET" && method !== "HEAD" && { body: bodyDecoded }),
-      },
-    );
-
-    setResponse(response);
-
-    // save to history
-    const newHistory = prepareHistory(history, {
-      headers: query,
-      method: method,
-      url: urlDecoded,
-      body: bodyDecoded,
+    startTransition(() => {
+      setResponse(undefined);
     });
+    try {
+      const response = await fetch(
+        `/api/request/${url}?${searchParams.toString()}`,
+        {
+          method,
+          ...(method !== "GET" && method !== "HEAD" && { body: bodyDecoded }),
+        },
+      );
+      if (response.headers.has("x-app-error")) {
+        dropTost(
+          response.headers.get("x-app-error") || "Request error",
+          "error",
+          "look at server console",
+        );
+      } else {
+        startTransition(() => {
+          setResponse(response);
+          // TODO: save to history !
+          const newHistory = prepareHistory(history, {
+            headers: query,
+            method: method,
+            url: urlDecoded,
+            body: bodyDecoded,
+          });
 
-    setHistory(newHistory);
+          setHistory(newHistory);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      dropTost("Internal app error", "error");
+    }
   };
 
   return (
@@ -101,7 +121,12 @@ export default function ClientPage() {
           <CardContent className="flex flex-col gap-8">
             <div className="flex items-end justify-between">
               <InputUrl
-                {...{ method, onMethodChange, onUrlChange, url: urlDecoded }}
+                {...{
+                  method,
+                  onMethodChange,
+                  onUrlChange,
+                  url: urlDecoded.trim(),
+                }}
               ></InputUrl>
               <Button onClick={onGo} disabled={!url}>
                 Go!

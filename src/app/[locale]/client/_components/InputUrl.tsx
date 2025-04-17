@@ -1,4 +1,4 @@
-import type { FC, FormEventHandler } from "react";
+import type { FC, ReactEventHandler } from "react";
 import { Select } from "@/components";
 import { Methods } from "@/app/_constants/methods";
 import { Input } from "@/components/ui/input";
@@ -14,18 +14,19 @@ const InputUrl: FC<{
     onMethodChange(value);
   };
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = (ev) => {
+  const onSubmit: ReactEventHandler<HTMLFormElement> = (ev) => {
     ev.preventDefault();
     const value = (
       ev.currentTarget.elements.namedItem("url") as HTMLInputElement
     ).value;
-    onUrlChange(value);
+    onUrlChange(value.trim());
   };
 
   return (
     <form
       className="grid grid-cols-[auto_620px_auto] gap-4 items-end"
       onSubmit={onSubmit}
+      onMouseLeave={onSubmit}
     >
       <Select
         label="Method"
