@@ -10,10 +10,11 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
 
 const selectOptions = ["json", "text"];
 
-const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
-  body,
-  onBodyChange,
-}) => {
+const Body: FC<{
+  body?: string;
+  onBodyChange: (body: string, params: URLSearchParams) => void;
+  query: Record<string, string>;
+}> = ({ body, onBodyChange, query }) => {
   const { theme } = useTheme();
 
   const [text, setText] = useState<string>(() => body || "");
@@ -21,16 +22,26 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
   const [mode, setMode] = useState("json");
 
   useEffect(() => {
+    const key = Object.keys(query).find(
+      (k) => k.toLowerCase() === "content-type",
+    );
+    const contentType = key ? query[key] : undefined;
+
+    if (contentType?.includes("text/plain")) {
+      setMode("text");
+    }
+  }, [query]);
+
+  useEffect(() => {
     validateBody(body, mode);
   }, [body, mode]);
 
   const validateBody = (value: string | undefined, modeValue: string) => {
-    if (modeValue === "json") {
+    if (modeValue === "json" && value) {
       try {
-        JSON.parse(value || "");
+        JSON.parse(value);
         setIsError(false);
-      } catch (err) {
-        console.error("JSON parse error", err);
+      } catch {
         setIsError(true);
       }
     } else {
@@ -38,7 +49,7 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
     }
   };
 
-  const handleTextChange = (value: string | undefined) => {
+  const handleTextChange = (value?: string) => {
     setText(value || "");
     validateBody(value, mode);
   };
@@ -60,7 +71,18 @@ const Body: FC<{ body?: string; onBodyChange: (body: string) => void }> = ({
         <Button
           disabled={isError}
           onClick={() => {
-            onBodyChange(text);
+            const params = new URLSearchParams(query);
+            if (text.length) {
+              if (mode === "json") {
+                params.set("Content-Type", "application/json");
+              } else {
+                params.set("Content-Type", "text/plain; charset=utf-8");
+              }
+            } else {
+              params.delete("Content-Type");
+            }
+
+            onBodyChange(text, params);
           }}
         >
           Ok

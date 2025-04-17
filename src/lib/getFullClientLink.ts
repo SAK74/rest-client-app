@@ -15,7 +15,7 @@ export function getFullClientLink(item: HistoryItem): string {
     }));
 
     headers.forEach(({ key, value }) => {
-      searchParams += `${key}=${value}`;
+      searchParams += `${key}=${value}&`;
     });
 
     link += searchParams;
