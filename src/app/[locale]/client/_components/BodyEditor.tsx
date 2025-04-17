@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Select } from "@/components";
 import { Button } from "@/components/ui/button";
@@ -16,8 +15,6 @@ const Body: FC<{
   onBodyChange: (body: string, params: URLSearchParams) => void;
   query: Record<string, string>;
 }> = ({ body, onBodyChange, query }) => {
-  const searchParams = useSearchParams();
-
   const { theme } = useTheme();
 
   const [text, setText] = useState<string>(() => body || "");
@@ -25,9 +22,12 @@ const Body: FC<{
   const [mode, setMode] = useState("json");
 
   useEffect(() => {
-    const contentType = query["Content-Type"];
+    const key = Object.keys(query).find(
+      (k) => k.toLowerCase() === "content-type",
+    );
+    const contentType = key ? query[key] : undefined;
 
-    if (contentType === "text/plain; charset=utf-8") {
+    if (contentType?.includes("text/plain")) {
       setMode("text");
     }
   }, [query]);
@@ -39,17 +39,17 @@ const Body: FC<{
   const validateBody = (value: string | undefined, modeValue: string) => {
     if (modeValue === "json" && value) {
       try {
-        JSON.parse(value || "");
+        JSON.parse(value);
         setIsError(false);
-      } catch (err) {
-        setIsError(!!err);
+      } catch {
+        setIsError(true);
       }
     } else {
       setIsError(false);
     }
   };
 
-  const handleTextChange = (value: string | undefined) => {
+  const handleTextChange = (value?: string) => {
     setText(value || "");
     validateBody(value, mode);
   };
@@ -71,8 +71,8 @@ const Body: FC<{
         <Button
           disabled={isError}
           onClick={() => {
-            const params = new URLSearchParams(searchParams.toString());
-            if (!!text.length) {
+            const params = new URLSearchParams(query);
+            if (text.length) {
               if (mode === "json") {
                 params.set("Content-Type", "application/json");
               } else {

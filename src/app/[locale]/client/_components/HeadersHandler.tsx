@@ -40,7 +40,7 @@ const defaultValues = {
   value: "",
 };
 
-const disabledHeaders = ["Content-Type"];
+const disabledHeaders = ["content-type"];
 
 const Headers: FC<{
   query: Record<string, string>;
@@ -109,24 +109,26 @@ const Headers: FC<{
           headers={headers}
           actions={(row) => (
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <button
+              <Button
+                variant={"ghost"}
                 onClick={() => {
                   form.reset(row);
                   setUpdatedItem(row);
                   setIsOpen(true);
                 }}
                 className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3 disabled:text-gray-400"
-                disabled={disabledHeaders.includes(row.key)}
+                disabled={disabledHeaders.includes(row.key.toLowerCase())}
               >
                 Edit
-              </button>
-              <button
+              </Button>
+              <Button
+                variant={"ghost"}
                 onClick={() => removeHeader(row)}
                 className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:text-gray-400"
                 disabled={disabledHeaders.includes(row.key)}
               >
                 Delete
-              </button>
+              </Button>
             </td>
           )}
         />
