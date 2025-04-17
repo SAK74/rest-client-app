@@ -2,7 +2,6 @@ import type { FC, ReactEventHandler } from "react";
 import { Select } from "@/components";
 import { Methods } from "@/app/_constants/methods";
 import { Input } from "@/components/ui/input";
-// import { replaceVariables } from "@/lib/replaceVariables";
 
 const InputUrl: FC<{
   method: string;
