@@ -13,10 +13,14 @@ import { type HistoryItem } from "@/lib/prepareHistory";
 export default function ClientPage() {
   const t = useTranslations("History_Page");
 
-  const [history, , isLoadingHistory] = useLocalStorage("history");
+  const [history, setHistory, isLoadingHistory] = useLocalStorage("history");
   const sortedHistory = history.length
     ? (JSON.parse(history) as Array<HistoryItem>).reverse()
     : [];
+
+  const clearHistory = () => {
+    setHistory("");
+  };
 
   return (
     <main className="flex flex-col gap-8 py-4 items-center">
@@ -38,8 +42,9 @@ export default function ClientPage() {
                   {item.method} {item.url}
                 </Link>
               ))}
-              {/* would be nice to have */}
-              <Button className="self-end">Clear history</Button>
+              <Button className="self-end" onClick={clearHistory}>
+                {t("clear_history")}
+              </Button>
             </div>
           )}
         </CardContent>
