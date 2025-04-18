@@ -34,6 +34,7 @@
   "History_Page": {
     "history_page": "Historia",
     "no_requests_title": "Nie wykonałeś żadnych żądań",
-    "no_requests_description": "Tutaj jest pusto. Spróbuj:"
+    "no_requests_description": "Tutaj jest pusto. Spróbuj:",
+    "clear_history": "Czysta historia"
   }
 }
