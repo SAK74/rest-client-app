@@ -1,5 +1,6 @@
 import { Mock } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import ClientPage from "@/app/[locale]/history/_components/Client";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { type HistoryItem } from "@/lib/prepareHistory";
@@ -12,6 +13,7 @@ vi.mock("next-intl", () => ({
       history_page: "History Page",
       no_requests: "No requests yet",
       no_requests_description: "Make your first request to see history",
+      clear_history: "Clear history",
     })[key],
 }));
 vi.mock("@/app/_components/Loader", () => ({
@@ -35,7 +37,7 @@ const mockHistory: HistoryItem[] = [
 
 const mockHistoryJSON = JSON.stringify(mockHistory);
 
-describe("ClientPage", () => {
+describe("History ClientPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -116,5 +118,27 @@ describe("ClientPage", () => {
 
     render(<ClientPage />);
     expect(screen.queryByText("Clear history")).not.toBeInTheDocument();
+  });
+});
+
+describe("History ClientPage interactions", () => {
+  let mockSetHistory: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    mockSetHistory = vi.fn();
+    (useLocalStorage as Mock).mockReturnValue([
+      JSON.stringify(mockHistory),
+      mockSetHistory,
+      false,
+    ]);
+  });
+
+  it("calls clear history when button clicked", async () => {
+    const user = userEvent.setup();
+    render(<ClientPage />);
+
+    await user.click(screen.getByText("Clear history"));
+
+    expect(mockSetHistory).toHaveBeenCalledTimes(1);
   });
 });
