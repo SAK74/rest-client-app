@@ -10,7 +10,7 @@ export default defineConfig({
     setupFiles: "./src/tests/setup.ts",
     coverage: {
       provider: "v8",
-      exclude: ["src/components/ui"],
+      exclude: ["src/components", "src/app/_components"],
       include: ["src/**/*.tsx"],
     },
   },
