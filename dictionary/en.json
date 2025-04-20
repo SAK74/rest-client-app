@@ -15,7 +15,10 @@
     "variables": "Variables",
     "must_log_in": "You must logged in to view something",
     "login": "Log in",
-    "signup": "Sign up"
+    "signup": "Sign up",
+    "project_description": "This powerfull application will allow you to execute REST queries, create and apply variables, save your query history and return to them at any time.",
+    "course_description_title": "Course Description",
+    "course_description": "You can learn more about course here"
   },
   "Client_Page": {
     "Method": "Method",

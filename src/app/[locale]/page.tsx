@@ -9,14 +9,27 @@ export default async function Home() {
     <div className="text-center py-12">
       {session ? (
         <>
-          <h1>
+          <h1 className="text-4xl pb-2">
             {t("welcome")}, {session.user?.name}!
           </h1>
-          <h2>{t("navi")}</h2>
-          <div className="mt-6 space-x-6">
+          <p className="pb-20">{t("project_description")}</p>
+          <h2 className="text-lg font-bold">{t("navi")}</h2>
+          <div className="mt-6 space-x-6 font-bold pb-20">
             <Link href={"/client"}>REST {t("client")}</Link>
             <Link href={"/history"}>{t("history")}</Link>
             <Link href={"/variables"}>{t("variables")}</Link>
+          </div>
+          <div>
+            <h2 className="text-lg font-bold">
+              {t("course_description_title")}
+            </h2>
+            <p>
+              {t("course_description")}
+              {" -> "}
+              <Link href="https://rs.school/courses/reactjs">
+                {t("course_description_title")}
+              </Link>
+            </p>
           </div>
         </>
       ) : (
