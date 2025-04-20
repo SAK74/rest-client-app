@@ -34,6 +34,7 @@
   "History_Page": {
     "history_page": "History",
     "no_requests_title": "You haven't executed any requests",
-    "no_requests_description": "It's empty here. Try:"
+    "no_requests_description": "It's empty here. Try:",
+    "clear_history": "Clear history"
   }
 }
