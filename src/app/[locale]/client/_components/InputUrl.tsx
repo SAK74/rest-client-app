@@ -23,6 +23,7 @@ const InputUrl: FC<{
 
   return (
     <form
+      data-testid="url-form"
       className="grid grid-cols-[auto_620px_auto] gap-4 items-end"
       onSubmit={onSubmit}
       onMouseLeave={onSubmit}
