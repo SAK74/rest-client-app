@@ -15,7 +15,10 @@
     "variables": "Zmienne",
     "must_log_in": "Musisz się zalogować by móc coś zobaczyć",
     "login": "Logowanie",
-    "signup": "Rejestracja"
+    "signup": "Rejestracja",
+    "project_description": "Aplikacja ta umożliwia uruchamianie zapytań REST, tworzenie i stosowanie zmiennych, zapisywanie historii zapytań i powrót do nich w dowolnym momencie.",
+    "course_description_title": "Opis wyścigu",
+    "course_description": "Więcej informacji na temat kursu można znaleźć tutaj"
   },
   "Client_Page": {
     "Method": "Metoda",
