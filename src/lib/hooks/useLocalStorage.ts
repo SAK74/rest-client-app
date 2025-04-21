@@ -1,33 +1,48 @@
-"use client";
+import { useSyncExternalStore } from "react";
 
-import { useState, useEffect } from "react";
-
-export function useLocalStorage(
-  key: string,
-): [string, (value: string) => void, isLoading: boolean] {
-  const [storedValue, setStoredValue] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      setStoredValue(item || "");
-    } catch (error) {
-      console.error("Error accessing localStorage:", error);
-      setStoredValue("");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [key]);
-
-  const setValue = (value: string) => {
-    try {
-      setStoredValue(value);
-      window.localStorage.setItem(key, value);
-    } catch (error) {
-      console.error("Error setting localStorage:", error);
+const subscribe = (key: string) => (cb: () => void) => {
+  const callback = (ev: StorageEvent) => {
+    if (ev.key === key) {
+      cb();
     }
   };
+  window.addEventListener("storage", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+  };
+};
 
-  return [storedValue, setValue, isLoading];
+type StorageFnType<T> = [T | null, (val: T) => void];
+
+function useLocalStorage(key: string): StorageFnType<string> {
+  const storage = useSyncExternalStore(
+    subscribe(key),
+    () => window.localStorage.getItem(key),
+    () => "",
+  );
+  const setStorage = (value: string) => window.localStorage.setItem(key, value);
+  return [storage, setStorage];
 }
+
+export interface HistoryItem {
+  method: string;
+  url: string;
+  body: string;
+  headers: { [k: string]: string };
+}
+
+export function useHistoryStorage() {
+  const [value, setValue] = useLocalStorage("rest-client-history");
+
+  const history = value ? (JSON.parse(value) as HistoryItem[]) : [];
+  const addToHistory = (newItem: HistoryItem) => {
+    history.push(newItem);
+    setValue(JSON.stringify(history));
+  };
+  const resetHistory = () => {
+    setValue("");
+  };
+  return { history, addToHistory, resetHistory };
+}
+
+export const useVariablesStorage = () => {};

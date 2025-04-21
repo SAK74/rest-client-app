@@ -2,24 +2,19 @@
 
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getFullClientLink } from "@/lib/getFullClientLink";
-import Loader from "@/app/_components/Loader";
 import NoRequests from "./NoRequests";
-import { type HistoryItem } from "@/lib/prepareHistory";
+import { useHistoryStorage } from "@/lib/hooks/useLocalStorage";
 
 export default function ClientPage() {
   const t = useTranslations("History_Page");
 
-  const [history, setHistory, isLoadingHistory] = useLocalStorage("history");
-  const sortedHistory = history.length
-    ? (JSON.parse(history) as Array<HistoryItem>).reverse()
-    : [];
+  const { history, resetHistory } = useHistoryStorage();
 
   const clearHistory = () => {
-    setHistory("");
+    resetHistory();
   };
 
   return (
@@ -31,13 +26,11 @@ export default function ClientPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {isLoadingHistory ? (
-            <Loader />
-          ) : !sortedHistory?.length ? (
+          {!history.length ? (
             <NoRequests />
           ) : (
             <div className="flex flex-col items-start">
-              {sortedHistory.map((item, i) => (
+              {history.reverse().map((item, i) => (
                 <Link key={i} href={getFullClientLink(item)}>
                   {item.method} {item.url}
                 </Link>

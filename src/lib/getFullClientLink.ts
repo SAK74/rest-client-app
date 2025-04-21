@@ -1,4 +1,4 @@
-import type { HistoryItem } from "./prepareHistory";
+import type { HistoryItem } from "./hooks/useLocalStorage";
 
 export function getFullClientLink(item: HistoryItem): string {
   let link = `client/${item.method}/${btoa(item.url)}`;

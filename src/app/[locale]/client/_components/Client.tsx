@@ -6,8 +6,6 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
-import { prepareHistory } from "@/lib/prepareHistory";
 import Headers from "./HeadersHandler";
 import InputUrl from "./InputUrl";
 import Code from "./CodeView";
@@ -16,6 +14,7 @@ import ResponseView from "./ResponseView";
 import { startTransition, useState } from "react";
 import { dropTost } from "@/lib/toast";
 import { decodeVars, encodeVars } from "@/lib/replaceVariables";
+import { useHistoryStorage } from "@/lib/hooks/useLocalStorage";
 
 export default function ClientPage() {
   const t = useTranslations("Client_Page");
@@ -32,8 +31,6 @@ export default function ClientPage() {
   }
 
   const [method, url, body] = params.request;
-
-  const [history, setHistory] = useLocalStorage("history");
 
   const onMethodChange = (newMethod: string) => {
     router.replace(
@@ -77,8 +74,9 @@ export default function ClientPage() {
 
   const [response, setResponse] = useState<Response | undefined>();
 
+  const { addToHistory } = useHistoryStorage();
+
   const onGo = async () => {
-    // TODO: variables insertion
     startTransition(() => {
       setResponse(undefined);
     });
@@ -99,14 +97,13 @@ export default function ClientPage() {
       } else {
         startTransition(() => {
           setResponse(response);
-          const newHistory = prepareHistory(history, {
+
+          addToHistory({
             headers: query,
             method: method,
             url: urlDecoded,
             body: bodyDecoded,
           });
-
-          setHistory(newHistory);
         });
       }
     } catch (err) {
