@@ -1,26 +1,37 @@
-import { useSyncExternalStore } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
-const subscribe = (key: string) => (cb: () => void) => {
-  const callback = (ev: StorageEvent) => {
-    if (ev.key === key) {
-      cb();
-    }
+const HISTORY_KEY = "rest-client-history";
+export const VARIABLES_KEY = "rest_client_variables";
+
+function subscribe(key: string) {
+  return function (cb: () => void) {
+    const callback = (ev: StorageEvent) => {
+      if (ev.key === key) {
+        cb();
+      }
+    };
+    window.addEventListener("storage", callback);
+    return () => {
+      window.removeEventListener("storage", callback);
+    };
   };
-  window.addEventListener("storage", callback);
-  return () => {
-    window.removeEventListener("storage", callback);
-  };
-};
+}
 
-type StorageFnType<T> = [T | null, (val: T) => void];
+type StorageFnType<T, P> = [T | null, (val: P) => void];
 
-function useLocalStorage(key: string): StorageFnType<string> {
+function useLocalStorage(key: string): StorageFnType<string, string> {
+  const subscribed = useMemo(() => subscribe(key), [key]);
   const storage = useSyncExternalStore(
-    subscribe(key),
+    subscribed,
     () => window.localStorage.getItem(key),
     () => "",
   );
-  const setStorage = (value: string) => window.localStorage.setItem(key, value);
+  const setStorage = useCallback(
+    (value: string) => {
+      window.localStorage.setItem(key, value);
+    },
+    [key],
+  );
   return [storage, setStorage];
 }
 
@@ -32,7 +43,7 @@ export interface HistoryItem {
 }
 
 export function useHistoryStorage() {
-  const [value, setValue] = useLocalStorage("rest-client-history");
+  const [value, setValue] = useLocalStorage(HISTORY_KEY);
 
   const history = value ? (JSON.parse(value) as HistoryItem[]) : [];
   const addToHistory = (newItem: HistoryItem) => {
@@ -45,4 +56,30 @@ export function useHistoryStorage() {
   return { history, addToHistory, resetHistory };
 }
 
-export const useVariablesStorage = () => {};
+export function useVariablesStorage() {
+  const [value, setValue] = useLocalStorage(VARIABLES_KEY);
+
+  const variables = useMemo(
+    () => (value ? (JSON.parse(value) as Record<string, string>) : {}),
+    [value],
+  );
+
+  const addToVars = useCallback(
+    (newVar: Record<string, string>) => {
+      const toSave = { ...variables, ...newVar };
+      setValue(JSON.stringify(toSave));
+    },
+    [variables, setValue],
+  );
+
+  const removeVar = useCallback(
+    (key: string) => {
+      const updated = { ...variables };
+      delete updated[key];
+
+      setValue(JSON.stringify(updated));
+    },
+    [variables, setValue],
+  );
+  return { variables, addToVars, removeVar };
+}

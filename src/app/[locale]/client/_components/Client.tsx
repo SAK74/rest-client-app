@@ -111,6 +111,7 @@ export default function ClientPage() {
       dropTost("Internal app error", "error");
     }
   };
+  //
 
   return (
     <main className="flex flex-col gap-8 py-4 items-center">

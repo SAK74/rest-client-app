@@ -7,14 +7,18 @@ import { Button } from "@/components/ui/button";
 import { getFullClientLink } from "@/lib/getFullClientLink";
 import NoRequests from "./NoRequests";
 import { useHistoryStorage } from "@/lib/hooks/useLocalStorage";
+import { useState } from "react";
 
 export default function ClientPage() {
   const t = useTranslations("History_Page");
 
   const { history, resetHistory } = useHistoryStorage();
+  const [, setState] = useState<string | undefined>();
 
   const clearHistory = () => {
     resetHistory();
+    // to allow page rerendering
+    setState("");
   };
 
   return (

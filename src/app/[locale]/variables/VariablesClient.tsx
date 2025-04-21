@@ -1,34 +1,24 @@
 "use client";
 
-import { getVariables } from "@/lib/getVariables";
-import React, { useState, useEffect } from "react";
-
-const STORAGE_KEY = "rest_client_variables";
-
-type VarsRecord = Record<string, string>;
+import { useVariablesStorage } from "@/lib/hooks/useLocalStorage";
+import React, { useState } from "react";
 
 export default function VariablesClient() {
-  const [variables, setVariables] = useState<VarsRecord>(
-    () => getVariables() || {},
-  );
+  const { variables, addToVars, removeVar } = useVariablesStorage();
   const [newKey, setNewKey] = useState("");
   const [newValue, setNewValue] = useState("");
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(variables));
-  }, [variables]);
-
   const handleAdd = () => {
     if (!newKey.trim()) return;
-    setVariables((prev) => ({ ...prev, [newKey]: newValue }));
+    addToVars({ [newKey]: newValue });
     setNewKey("");
     setNewValue("");
   };
 
   const handleDelete = (key: string) => {
-    const updated = { ...variables };
-    delete updated[key];
-    setVariables(updated);
+    removeVar(key);
+    setNewKey("");
+    setNewValue("");
   };
 
   return (

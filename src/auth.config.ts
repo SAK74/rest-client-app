@@ -9,6 +9,7 @@ import { UserCredentials } from "./schemas";
 
 export const authConfig = {
   pages: { signIn: "/login" },
+  trustHost: true,
   providers: [
     github({
       clientId: process.env.GH_CLIENT_ID,
