@@ -18,7 +18,7 @@ const ThemeChanger = dynamic(() => import("./ThemeChanger"), { ssr: false });
 
 export default function Header() {
   const t = useTranslations("Header");
-  const { status } = useSession();
+  const { status, update: updateSession } = useSession();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -26,6 +26,7 @@ export default function Header() {
     try {
       await signOut({ redirect: false });
       dropTost("You are logged out", "success");
+      updateSession();
       router.replace("/");
     } catch (err) {
       let message = "Somethink went wrong...";
