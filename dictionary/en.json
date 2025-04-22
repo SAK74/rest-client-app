@@ -39,5 +39,11 @@
     "no_requests_title": "You haven't executed any requests",
     "no_requests_description": "It's empty here. Try:",
     "clear_history": "Clear history"
+  },
+  "Vars_page": {
+    "tittle": "Manage variables",
+    "add_update": "Add/Update",
+    "var_name": "Variable name",
+    "var_value": "Variable value"
   }
 }

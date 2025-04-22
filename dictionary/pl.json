@@ -39,5 +39,11 @@
     "no_requests_title": "Nie wykonałeś żadnych żądań",
     "no_requests_description": "Tu jest pusto. Spróbuj:",
     "clear_history": "Wyczyść mhistorie"
+  },
+  "Vars_page": {
+    "tittle": "Zarządzanie zmiennymi",
+    "add_update": "Dodaj/Zmień",
+    "var_name": "Nazwa źmiennej",
+    "var_value": "Wartość"
   }
 }
