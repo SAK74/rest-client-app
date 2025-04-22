@@ -137,7 +137,7 @@ export default function ClientPage() {
               </Button>
             </div>
             <Tabs defaultValue={"headers"}>
-              <TabsList>
+              <TabsList className="*:cursor-pointer">
                 <TabsTrigger value="headers">Headers</TabsTrigger>
                 <TabsTrigger value="body">Body</TabsTrigger>
                 <TabsTrigger value="code">Code</TabsTrigger>

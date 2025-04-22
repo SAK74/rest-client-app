@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { Select } from "@/components";
 import { Button } from "@/components/ui/button";
+import Loader from "@/app/_components/Loader";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
@@ -95,6 +96,7 @@ const Body: FC<{
         theme={theme === "dark" ? "vs-dark" : "light"}
         value={text}
         onChange={handleTextChange}
+        loading={<Loader />}
       />
     </div>
   );

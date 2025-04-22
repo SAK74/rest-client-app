@@ -1,8 +1,12 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+const allowedDevOrigins = new Array(9)
+  .fill("")
+  .map((_, i) => `192.168.0.5${i + 1}`);
+
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["192.168.0.54", "192.168.0.58", "192.168.0.56"],
+  allowedDevOrigins,
 };
 
 const withNextIntl = createNextIntlPlugin();

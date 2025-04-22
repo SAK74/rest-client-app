@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Loader from "@/app/_components/Loader";
 
 const Monaco = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
@@ -32,23 +34,26 @@ export default function ResponseView({ response }: Props) {
       <div>
         <strong>Status:</strong> {response.status} {response.statusText}
       </div>
-
-      <div>
-        <strong>Headers:</strong>
-        <div className="mt-2 border p-2 rounded-md bg-muted">
-          <ul className="space-y-1">
-            {[...response.headers.entries()].map(([key, value]) => (
-              <li key={key}>
-                <span className="font-semibold">{key}</span>: {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div>
-        <strong>Body:</strong>
-        <div className="mt-2">
+      <Tabs defaultValue={"headers"}>
+        <TabsList className="*:cursor-pointer">
+          <TabsTrigger value="headers">Headers</TabsTrigger>
+          <TabsTrigger value="body">Body</TabsTrigger>
+        </TabsList>
+        <TabsContent value="headers" className="border p-2 rounded-md bg-muted">
+          <table className="">
+            <tbody className="space-y-1">
+              {[...response.headers.entries()].map(([key, value]) => (
+                <tr key={key} className="odd:bg-muted-foreground/15 rounded">
+                  <th scope="row" className="w-1/3">
+                    {key}
+                  </th>
+                  <td>{value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </TabsContent>
+        <TabsContent value="body">
           <Monaco
             language="json"
             theme={monacoTheme}
@@ -60,9 +65,10 @@ export default function ResponseView({ response }: Props) {
               scrollBeyondLastLine: false,
             }}
             height="300px"
+            loading={<Loader />}
           />
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
