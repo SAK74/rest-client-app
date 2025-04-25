@@ -5,8 +5,8 @@
 
 @layer base {
   a:not(:is(button a)):hover {
-    text-decoration: underline;
-  } */
+    @apply underline;
+  }
 }
 
 /* custom vars */
@@ -60,9 +60,9 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.97 0 0);
   --foreground: oklch(0.13 0.028 261.692);
-  --card: oklch(1 0 0);
+  --card: oklch(0.99 0 0);
   --card-foreground: oklch(0.13 0.028 261.692);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0.028 261.692);
@@ -133,5 +133,18 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@theme {
+  --animate-hourglass: step-circle 2s steps(12) infinite;
+}
+
+@keyframes step-circle {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

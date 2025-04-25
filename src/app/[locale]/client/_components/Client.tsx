@@ -15,6 +15,7 @@ import { startTransition, useState } from "react";
 import { dropTost } from "@/lib/toast";
 import { decodeVars, encodeVars } from "@/lib/replaceVariables";
 import { useHistoryStorage } from "@/lib/hooks/useLocalStorage";
+import Hourglass from "@/components/Hourglass";
 
 export default function ClientPage() {
   const t = useTranslations("Client_Page");
@@ -76,8 +77,11 @@ export default function ClientPage() {
 
   const { addToHistory } = useHistoryStorage();
 
+  const [isRequesting, setIsRequesting] = useState(false);
+
   const onGo = async () => {
     startTransition(() => {
+      setIsRequesting(true);
       setResponse(undefined);
     });
     try {
@@ -97,7 +101,6 @@ export default function ClientPage() {
       } else {
         startTransition(() => {
           setResponse(response);
-
           addToHistory({
             headers: query,
             method: method,
@@ -109,13 +112,15 @@ export default function ClientPage() {
     } catch (err) {
       console.log(err);
       dropTost("Internal app error", "error");
+    } finally {
+      setIsRequesting(false);
     }
   };
-  //
 
   return (
     <main className="flex flex-col gap-8 py-4 items-center">
       <section>
+        {isRequesting && <Hourglass />}
         <Card className="mx-6 w-4xl">
           <CardHeader>
             <CardTitle className="flex flex-col items-center">
