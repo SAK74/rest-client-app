@@ -1,0 +1,47 @@
+{
+  "Header": {
+    "tittle": "Welcome in rest-client!",
+    "login_register": "Log in/Sign up",
+    "client": "Client",
+    "history": "History",
+    "variables": "Variables",
+    "logout": "Logout"
+  },
+  "Welcome_Page": {
+    "welcome": "Welcome",
+    "navi": "What would you like to do?",
+    "client": "Client",
+    "history": "History",
+    "variables": "Variables",
+    "must_log_in": "You must logged in to begin",
+    "login": "Log in",
+    "signup": "Sign up",
+    "project_description": "This powerfull application will allow you to execute REST queries, create and apply variables, save your query history and return to them at any time."
+  },
+  "Client_Page": {
+    "Method": "Method",
+    "REST_Client": "REST Client",
+    "Endpoint_URL": "Endpoint URL",
+    "send_btn": "Send"
+  },
+  "Login_Form": {
+    "login_tittle": "Login, please",
+    "register_tittle": "Register account",
+    "login_link": "Do not have account? Register!",
+    "register_link": "Have account? Login!",
+    "submit_btn": "Submit",
+    "login_with_provider": "Or log in with"
+  },
+  "History_Page": {
+    "history_page": "History",
+    "no_requests_title": "You haven't executed any requests",
+    "no_requests_description": "It's empty here. Try:",
+    "clear_history": "Clear history"
+  },
+  "Vars_page": {
+    "tittle": "Manage variables",
+    "add_update": "Add/Update",
+    "var_name": "Variable name",
+    "var_value": "Variable value"
+  }
+}

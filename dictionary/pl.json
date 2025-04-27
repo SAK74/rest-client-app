@@ -1,0 +1,47 @@
+{
+  "Header": {
+    "tittle": "Witamy w rest-cliencie!",
+    "login_register": "Logowanie/rejestracja",
+    "client": "Klient",
+    "history": "Historia",
+    "variables": "Zmienne",
+    "logout": "Wyloguj"
+  },
+  "Welcome_Page": {
+    "welcome": "Witaj",
+    "navi": "Gdzie zmierzasz?",
+    "client": "Klient",
+    "history": "Historia",
+    "variables": "Zmienne",
+    "must_log_in": "Najpierw musisz się zalogować",
+    "login": "Logowanie",
+    "signup": "Rejestracja",
+    "project_description": "Aplikacja umożliwia uruchamianie zapytań REST, tworzenie i stosowanie zmiennych, zapisywanie historii zapytań i powrót do nich w dowolnym momencie."
+  },
+  "Client_Page": {
+    "Method": "Metoda",
+    "REST_Client": "REST-cliencie",
+    "Endpoint_URL": "Punkt końcowy URL",
+    "send_btn": "Wyślij"
+  },
+  "Login_Form": {
+    "login_tittle": "Zaloguj się, proszę",
+    "register_tittle": "Zarejestruj konto",
+    "login_link": "Nie masz konta? Zarejestruj się!",
+    "register_link": "Masz konto? Zaloguj się!",
+    "submit_btn": "Zatwierdź",
+    "login_with_provider": "Albo załoguj się przez"
+  },
+  "History_Page": {
+    "history_page": "Historia",
+    "no_requests_title": "Nie wykonałeś żadnych żądań",
+    "no_requests_description": "Tu jest pusto. Spróbuj:",
+    "clear_history": "Wyczyść mhistorie"
+  },
+  "Vars_page": {
+    "tittle": "Zarządzanie zmiennymi",
+    "add_update": "Dodaj/Zmień",
+    "var_name": "Nazwa źmiennej",
+    "var_value": "Wartość"
+  }
+}
