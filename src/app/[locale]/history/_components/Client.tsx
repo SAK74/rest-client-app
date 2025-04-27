@@ -8,11 +8,12 @@ import { getFullClientLink } from "@/lib/getFullClientLink";
 import NoRequests from "./NoRequests";
 import { useHistoryStorage } from "@/lib/hooks/useLocalStorage";
 import { useState } from "react";
+import Loader from "@/app/_components/Loader";
 
 export default function ClientPage() {
   const t = useTranslations("History_Page");
 
-  const { history, resetHistory } = useHistoryStorage();
+  const { history, resetHistory, loading } = useHistoryStorage();
   const [, setState] = useState<string | undefined>();
 
   const clearHistory = () => {
@@ -30,7 +31,9 @@ export default function ClientPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {!history.length ? (
+          {loading ? (
+            <Loader />
+          ) : !history.length ? (
             <NoRequests />
           ) : (
             <div className="flex flex-col items-start">

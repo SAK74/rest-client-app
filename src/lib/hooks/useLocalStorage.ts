@@ -1,4 +1,10 @@
-import { useCallback, useMemo, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 const HISTORY_KEY = "rest-client-history";
 export const VARIABLES_KEY = "rest_client_variables";
@@ -44,8 +50,16 @@ export interface HistoryItem {
 
 export function useHistoryStorage() {
   const [value, setValue] = useLocalStorage(HISTORY_KEY);
+  const [loading, setLoading] = useState(true);
 
-  const history = value ? (JSON.parse(value) as HistoryItem[]) : [];
+  useEffect(() => {
+    setLoading(false);
+  }, [value]);
+
+  const history = useMemo(
+    () => (value ? (JSON.parse(value) as HistoryItem[]) : []),
+    [value],
+  );
   const addToHistory = (newItem: HistoryItem) => {
     history.push(newItem);
     setValue(JSON.stringify(history));
@@ -53,7 +67,7 @@ export function useHistoryStorage() {
   const resetHistory = () => {
     setValue("");
   };
-  return { history, addToHistory, resetHistory };
+  return { history, addToHistory, resetHistory, loading };
 }
 
 export function useVariablesStorage() {
