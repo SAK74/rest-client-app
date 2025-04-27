@@ -13,12 +13,10 @@
     "client": "Klient",
     "history": "Historia",
     "variables": "Zmienne",
-    "must_log_in": "Musisz się zalogować by móc coś zobaczyć",
+    "must_log_in": "Najpierw musisz się zalogować",
     "login": "Logowanie",
     "signup": "Rejestracja",
-    "project_description": "Aplikacja ta umożliwia uruchamianie zapytań REST, tworzenie i stosowanie zmiennych, zapisywanie historii zapytań i powrót do nich w dowolnym momencie.",
-    "course_description_title": "Opis wyścigu",
-    "course_description": "Więcej informacji na temat kursu można znaleźć tutaj"
+    "project_description": "Aplikacja umożliwia uruchamianie zapytań REST, tworzenie i stosowanie zmiennych, zapisywanie historii zapytań i powrót do nich w dowolnym momencie."
   },
   "Client_Page": {
     "Method": "Metoda",
