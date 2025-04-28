@@ -42,6 +42,7 @@
     "tittle": "Zarządzanie zmiennymi",
     "add_update": "Dodaj/Zmień",
     "var_name": "Nazwa źmiennej",
-    "var_value": "Wartość"
+    "var_value": "Wartość",
+    "description": "Zmienne są umieszczane w podwójnych nawiasach klamrowych <inset></inset> i mogą być używane w Url adresie, body i wartościach nagłówków."
   }
 }

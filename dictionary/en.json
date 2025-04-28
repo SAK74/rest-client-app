@@ -42,6 +42,7 @@
     "tittle": "Manage variables",
     "add_update": "Add/Update",
     "var_name": "Variable name",
-    "var_value": "Variable value"
+    "var_value": "Variable value",
+    "description": "Variables are placed in doubke curly brackets <inset></inset> and can be used in Url adress, body and headers values."
   }
 }

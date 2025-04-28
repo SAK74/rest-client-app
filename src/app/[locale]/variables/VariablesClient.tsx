@@ -62,7 +62,7 @@ export default function VariablesClient() {
           <Button onClick={handleAdd}>{t("add_update")}</Button>
         </form>
 
-        <ul className="mt-4">
+        <ul className="mt-4 max-h-76 overflow-auto">
           {Object.entries(variables).map(([k, v]) => (
             <li key={k} className="mb-2 space-x-2 cursor-pointer">
               <Trash2Icon
@@ -87,6 +87,12 @@ export default function VariablesClient() {
           ))}
         </ul>
       </div>
+      <p className="italic">
+        <strong>* </strong>
+        {t.rich("description", {
+          inset: () => <strong className="">{"{{---}}"}</strong>,
+        })}
+      </p>
     </div>
   );
 }
