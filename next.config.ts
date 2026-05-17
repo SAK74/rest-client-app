@@ -7,6 +7,9 @@ const allowedDevOrigins = new Array(9)
 
 const nextConfig: NextConfig = {
   allowedDevOrigins,
+  turbopack: {
+    root: process.cwd(),
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();
